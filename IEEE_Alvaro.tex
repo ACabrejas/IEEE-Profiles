@@ -46,18 +46,30 @@ Traffic, Congestion, Intelligent Algorithms
 \end{IEEEkeywords}
 
 \section{Introduction}
-Investment in the infrastructure of transport systems is an essential driver for the economy \cite{government}. In developed countries such as the UK, there is limited capability to increase the physical capacity of the transport infrastructure. This is specifically the case for the Strategic Road Network, comprising approximately 4,400 miles of motorways and major trunk roads across England \cite{Strategic}. Current transportation policy and research is focused on Intelligent Mobility rather that the construction of new infrastructure: in the context of road transport, Intelligent Mobility aims to utilise new technologies and real-time data to improve the efficiency of existing physical infrastructure \cite{needs}.\\
+Investment in the infrastructure of transport systems is an essential driver for the economy \cite{government}. 
+In developed countries such as the UK, there is limited capability to increase the physical capacity of the transport infrastructure. 
+This is specifically the case for the Strategic Road Network, comprising approximately 4,400 miles of motorways and major trunk roads across England \cite{Strategic}. 
+Current transportation policy and research is focused on Intelligent Mobility rather that the construction of new infrastructure: in the context of road transport, Intelligent Mobility aims to utilise new technologies and real-time data to improve the efficiency of existing physical infrastructure \cite{needs}.\\
 
-The UK is considered world-leading in its ability to collect and process real-time data from its road network. Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. Highways England collects data of the speed, flow and travel time on the Strategic Road Network, using sensors on the road and in vehicles. These are operated by Thales UK in collaboration with other partners.\\
+The UK is considered world-leading in its ability to collect and process real-time data from its road network. 
+Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
+Highways England collects data of the speed, flow and travel time on the Strategic Road Network, using sensors on the road and in vehicles. 
+These are operated by Thales UK in collaboration with other partners.\\
 
 Here, we investigate novel methods for generating profiles that do not require segmentation or an underlying model, and that can be computed by only using statistical and spectral analysis of previous data.
 
 \section{Data}
-The UK National Traffic Information System (NTIS) employs a directed network model to represent the major roads in England; wherever a road encounters a diversion, a node is placed on the network and an edge is placed following the motorway. The basic building blocks of the system are the so-called links. They are segments of these edges, with a length varying between 500 and 2500 meters, representing of carriageways in the edges between nodes connected by a road. The links on the network incorporate thousands of induction loops (sensors) at different sites, which report speed, flow and other data to a centralised system.\\
+The UK National Traffic Information System (NTIS) employs a directed network model to represent the major roads in England; wherever a road encounters a diversion, a node is placed on the network and an edge is placed following the motorway. 
+The basic building blocks of the system are the so-called links. 
+They are segments of these edges, with a length varying between 500 and 2500 meters, representing of carriageways in the edges between nodes connected by a road. 
+The links on the network incorporate thousands of induction loops (sensors) at different sites, which report speed, flow and other data to a centralised system.\\
 
-NTIS data is being used to assign a traffic profile to each link on the network. The profile gives the expected travel time at any time of day for the different sections of the Highway network, understood as the average time to transverse the links for the vehicles currently in it. These profiles use analysis of previous travel times within the same section of road to provide forecasts of expected future travel times and state of traffic.\\
+NTIS data is being used to assign a traffic profile to each link on the network. 
+The profile gives the expected travel time at any time of day for the different sections of the Highway network, understood as the average time to transverse the links for the vehicles currently in it. 
+These profiles use analysis of previous travel times within the same section of road to provide forecasts of expected future travel times and state of traffic.\\
 
-Operating modern Smart Motorways in the UK revolves around the use of these traffic profiles, operators rely on them to identify deviations, take corrective actions and display accurate information on the overhead signs. Better profiles means more accuracy for the whole system.\\
+Operating modern Smart Motorways in the UK revolves around the use of these traffic profiles, operators rely on them to identify deviations, take corrective actions and display accurate information on the overhead signs. 
+Better profiles means more accuracy for the whole system.\\
 
 Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent segmentation. 
 
@@ -69,7 +81,8 @@ Currently, generating these profiles makes use of a combination of an Exponentia
 	\item The dataset for M25 comprises 75 days of data (07/04/2017-20/06/2017).
 	\item Links with more than 10\% of missing data were discarded.
 \end{itemize}
-The first two motorways were selected due to their combination of recurrent and outstanding congestion. The M25 was selected on the base that it is the most used Motorway in England on a daily basis, suffering from chronic congestion.
+The first two motorways were selected due to their combination of recurrent and outstanding congestion. 
+The M25 was selected on the base that it is the most used Motorway in England on a daily basis, suffering from chronic congestion.
 \subsection{Data Contents}
 For each link on a specific date, the data consists of one entry per minute, containing, amongst others, the following:
 \begin{itemize}
@@ -80,9 +93,13 @@ For each link on a specific date, the data consists of one entry per minute, con
 
 
 \section{Examples of travel times} 
-The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. The travel time for a given segment of road as the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
+The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
+The travel time for a given segment of road as the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
 
-As we can see in Figure \ref{fig:travel_time_example} the travel time remains within a vaguely predictable pattern most of the days. We will find very low highway travel times during the nights, mostly being equal to the free flow time, it will meaningfully rise as people leave to work and the add load to the motorways. This collective behaviour will create the morning traffic jams. As the morning rush passes, the travel times settle to a plateau that lasts until late afternoon when we can see the evening rush, which potentially, albeit less likely, can also create jams. After this, the travel times slowly decay until we are again in the night free-flow regime.
+As we can see in Figure \ref{fig:travel_time_example} the travel time remains within a vaguely predictable pattern most of the days. 
+We will find very low highway travel times during the nights, mostly being equal to the free flow time, it will meaningfully rise as people leave to work and the add load to the motorways. 
+This collective behaviour will create the morning traffic jams. As the morning rush passes, the travel times settle to a plateau that lasts until late afternoon when we can see the evening rush, which potentially, albeit less likely, can also create jams. 
+After this, the travel times slowly decay until we are again in the night free-flow regime.
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{./images/Traveltime_example.png}}
@@ -90,22 +107,28 @@ As we can see in Figure \ref{fig:travel_time_example} the travel time remains wi
 	\label{fig:travel_time_example}
 \end{figure}
 
-However, as it also follows from Figure \ref{fig:travel_time_example}, we can see that there are a series of excursions out of this otherwise oscillating yet bounded typical travel time. In these occasions the travel time can increase several times fold the usual values. 
+However, as it also follows from Figure \ref{fig:travel_time_example}, we can see that there are a series of excursions out of this otherwise oscillating yet bounded typical travel time. 
+In these occasions the travel time can increase several times fold the usual values. 
 \section{Current Traffic Profiles?}
-One of the main current approaches for highway operators is to generate profiles for each section of road. These profiles indicate what travel times can be expected in a given time and place.
+One of the main current approaches for highway operators is to generate profiles for each section of road. 
+These profiles indicate what travel times can be expected in a given time and place.
 
 \subsection{Use of Exponentially Weighted Moving Average} \label{ewma}
-One currently used way for creating these Traffic Profiles consists in applying an Exponentially Weighted Moving Average (EWMA) on the same minute of every day, with the implicit assumption that we can expect similar road behaviour at the same time of the day. Whatever changes happen for a given time, are smooth enough so their trend will be appropriately approximated by the EWMA.
+One currently used way for creating these Traffic Profiles consists in applying an Exponentially Weighted Moving Average (EWMA) on the same minute of every day, with the implicit assumption that we can expect similar road behaviour at the same time of the day. 
+Whatever changes happen for a given time, are smooth enough so their trend will be appropriately approximated by the EWMA.
 In these algorithms we find that the travel time forecast $F(i,d)$ on the $i-th$ minute of a given day $d$ will be:
 \begin{equation}
 F^{d}_i = \alpha * t^{d-1}_{i} + (1-\alpha)*F^{d-1}_{i}
 \end{equation}
-The main problem with using an EWMA is the manner in which the memory decays. Since more recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times in that section of road until enough new measurements have been taken to dissipate this effect.
+The main problem with using an EWMA is the manner in which the memory decays. 
+Since more recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times in that section of road until enough new measurements have been taken to dissipate this effect.
 
 \subsection{Segmentation}\label{segmentation}
-In addition, to acknowledge the specific differences between some special dates in the year, and the difference between days of the week, this family of methods require the use of heavy date segmentation. This segmentation means that the EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...)
+In addition, to acknowledge the specific differences between some special dates in the year, and the difference between days of the week, this family of methods require the use of heavy date segmentation. 
+This segmentation means that the EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...)
 If we combine this with the shortcomings presented in \ref{ewma}, we find that some long reaching effects are generated, which can propagate for weeks into the future predictions, but do not have any reflection on the observed travel times, as it can be observed in Figure \ref{fig:EWMA_spike}. 
-Furthermore, in order to generate this segmentation in a valid manner, an experienced team is necessary, since the needs for segmentation can geographically vary. This dependence on experienced teams can lead to the creation of legacy systems which may not be well understood, decreasing their usability over time unless extra effort is put into transmitting this knowledge and continually training new staff.
+Furthermore, in order to generate this segmentation in a valid manner, an experienced team is necessary, since the needs for segmentation can geographically vary. 
+This dependence on experienced teams can lead to the creation of legacy systems which may not be well understood, decreasing their usability over time unless extra effort is put into transmitting this knowledge and continually training new staff.
 \begin{figure}
 	\includegraphics[width=\linewidth]{EWMA.pdf}
 	\caption{Example of the current algorithm predicting increases in travel times for several weeks after a peak is seen in the measured travel times (25/04/2016)}
@@ -114,7 +137,8 @@ Furthermore, in order to generate this segmentation in a valid manner, an experi
 
 
 \section{Algorithm} \label{algorithm}
-Given the cyclic nature of traffic, we aimed for a prediction algorithm that could account for the periodic variations while being resilient to fluctuations. This algorithm also should:
+Given the cyclic nature of traffic, we aimed for a prediction algorithm that could account for the periodic variations while being resilient to fluctuations. 
+This algorithm also should:
 \begin{itemize}
 	\item Mitigate the propagation of isolated events into future forecasts.
 	\item Not require the use of time segmentation (experience) and be valid for regular and "special dates".
@@ -124,7 +148,9 @@ Given the cyclic nature of traffic, we aimed for a prediction algorithm that cou
 \end{itemize}
 
 \subsection{Null Model: Naive Segmentation}
-To obtain an accurate indication of the performance of the algorithm developed in the previous subsections, an example of basic segmentation was coded. This involved a weighted combination of the training data points using uniform weights. In this way, for the $i-th$ minute of the week and using a training set composed of the previous of $n$ weeks, the Null profile is:
+To obtain an accurate indication of the performance of the algorithm developed in the previous subsections, an example of basic segmentation was coded. 
+This involved a weighted combination of the training data points using uniform weights. 
+In this way, for the $i-th$ minute of the week and using a training set composed of the previous of $n$ weeks, the Null profile is:
 \begin{equation}
 Null(i,n) = \sum_{\textrm{week}=1}^{n} \frac{x^i_n}{n} 
 \end{equation}
@@ -151,11 +177,15 @@ In order to stop the large deviations from affecting the underlying true profile
 \begin{equation}
 x_t = Background_t + Spikes_t + \xi
 \end{equation}
-The objective is to separate them in such a way that the recurring congestion is captured as part of the Background and used for spectral analysis, trying to mitigate the prediction error induced by the high frequency oscillations and obtaining a basic view of what can be daily observed. Meanwhile, the spikes, including the recurring component not captured in the background and the non-recurring congestion, are treated separately in an attempt to find seasonality in larger time scales than those in which the background oscillates. Ideally, after this step, an operator should only find isolated large events deviating from the profile and white noise.\\
+The objective is to separate them in such a way that the recurring congestion is captured as part of the Background and used for spectral analysis, trying to mitigate the prediction error induced by the high frequency oscillations and obtaining a basic view of what can be daily observed. 
+Meanwhile, the spikes, including the recurring component not captured in the background and the non-recurring congestion, are treated separately in an attempt to find seasonality in larger time scales than those in which the background oscillates. 
+Ideally, after this step, an operator should only find isolated large events deviating from the profile and white noise.\\
 
 To prevent the differing lengths of the links from affecting this decomposition, all travel times were normalized according to their corresponding link's free flow time, understood as the time to transverse the length of the link at the maximum speed allowed by the motorway.\\
 
-A threshold was heuristically chosen to separate the two components in the different regimes. Intuitively, this threshold scales with the amount of recurring congestion in a link. Whenever a data point is above the threshold, it is flagged as belonging to a spike.
+A threshold was heuristically chosen to separate the two components in the different regimes.
+ Intuitively, this threshold scales with the amount of recurring congestion in a link. 
+ Whenever a data point is above the threshold, it is flagged as belonging to a spike.
 For this purpose, we define an indicator function:\\
 \begin{equation}
 \delta_{spike}= \left\{
@@ -197,7 +227,9 @@ For this purpose, we define an indicator function:\\
 
 
 \subsection{Spectral Component}
-The main difficulty when dealing with the Background time series is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. In these situations signal smoothing can be easily performed with removing completely the frequency components from a certain frequency and up while the information bearing low frequency components are retained. For this tast, the Fast Fourier Transform (FFT) \cite{FFT} was used.
+The main difficulty when dealing with the Background time series is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. 
+In these situations signal smoothing can be easily performed with removing completely the frequency components from a certain frequency and up while the information bearing low frequency components are retained. 
+For this tast, the Fast Fourier Transform (FFT) \cite{FFT} was used.
 
 Below, the sequence of steps taken to process the Background part of the measured travel times is described
 \begin{enumerate}
@@ -210,9 +242,13 @@ Below, the sequence of steps taken to process the Background part of the measure
 
 \end{enumerate}
 \subsection{Seasonality Component}
-Seasonal Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since "STL has several advantages over the classical decomposition method and X-12-ARIMA: Unlike X-12-ARIMA, STL will handle any type of seasonality, not only monthly and quarterly data. The seasonal component is allowed to change over time, and the rate of change can be controlled by the user. The smoothness of the trend-cycle can also be controlled by the user. It can be robust to outliers (i.e., the user can specify a robust decomposition). So occasional unusual observations will not affect the estimates of the trend-cycle and seasonal components" \cite{forecasting}.\\
+Seasonal Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since "STL has several advantages over the classical decomposition method and X-12-ARIMA: Unlike X-12-ARIMA, STL will handle any type of seasonality, not only monthly and quarterly data. 
+The seasonal component is allowed to change over time, and the rate of change can be controlled by the user. 
+The smoothness of the trend-cycle can also be controlled by the user. It can be robust to outliers (i.e., the user can specify a robust decomposition). 
+So occasional unusual observations will not affect the estimates of the trend-cycle and seasonal components" \cite{forecasting}.\\
 
-Below, the sequence of steps taken to process the Seasonality Component part of the measured travel times is described. Note that this should be applied to the $n$ training weeks as a single time series.
+Below, the sequence of steps taken to process the Seasonality Component part of the measured travel times is described. 
+Note that this should be applied to the $n$ training weeks as a single time series.
 \begin{enumerate}
 	\item STL Decomposition of Background for daily seasonality
 	\item Extract and sum the series corresponding Trend and Remainder from 1)
@@ -255,13 +291,16 @@ Where $\delta_{spike}$ is the indicator function defined in Equation \ref{ref:de
 
 
 \section{Accuracy Results}
-In this section the accuracy of the algorithm described above is compared against the Published Profiles and the Null Model. The error is quantified as the average distance between the prediction and the measured travel times across all analysed links.
+In this section the accuracy of the algorithm described above is compared against the Published Profiles and the Null Model. 
+The error is quantified as the average distance between the prediction and the measured travel times across all analysed links.
 \begin{equation}
 \textrm{Error} = \left( \sum_{\textrm{Link}=1}^{n} \frac{\|\textrm{Measurement} - \textrm{Prediction}\|}{\textrm{Measurement}}\right) /n 
 \end{equation}
 \subsection{Accuracy by Quantile}
 In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the Null Profile across all percentiles of travel time.
-As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the Null Model for all percentiles of travel time except for the most extreme values where they all perform poorly. The most relevant difference occurs between percentiles $[60-95]$, where the Published Profile starts to suffer from higher inaccuracy, due to some extreme events in the shorter links. In all cases, the Hybrid model is the one that requires greater travel times to reach a $20\%$ error in the prediction.
+As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the Null Model for all percentiles of travel time except for the most extreme values where they all perform poorly. 
+The most relevant difference occurs between percentiles $[60-95]$, where the Published Profile starts to suffer from higher inaccuracy, due to some extreme events in the shorter links. 
+In all cases, the Hybrid model is the one that requires greater travel times to reach a $20\%$ error in the prediction.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{/finalplots/m6_q.pdf}}
 	\caption{Average accuracy results in M6 across percentiles of travel time.}
@@ -284,7 +323,8 @@ As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, t
 
 \subsection{Daytime Error}
 In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the Null Profile across the times of the day.
-As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the Null Model for all times of the day. The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles. 
+As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the Null Model for all times of the day. 
+The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles. 
 In the case of the M6 and M11, where the training set is richer, the error at peak times is reduced by at least 50\% in all cases, reaching as much as 68.7\% in the case of the M6 morning rush.
 In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the methods used to calculate the Published Profile, this recurrent congestion is better captured by it, without the congestion being lighter in intensity than in the cases for the M6 and M11. 
 Even in this case, the proposed algorithm performs significantly better than any of the other two, except for a brief window between 6-7AM when it is outperformed by the Null Model.
@@ -312,11 +352,13 @@ Even in this case, the proposed algorithm performs significantly better than any
 HERE BE MULTIPLOT(3) HISTOGRAM WITH THE DISTRIBUTION OF ERRORS, ONLY SHOW SHAPE
 \section{Future Work}
 The algorithm supplied above meets all the requirements described in Section \ref{algorithm} except for the fact that it requires a heuristically set threshold. 
-One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform. In the transformed time series, it is possible to see which time scales are more affected by fluctuations and rare events while these are ongoing. Then, the Wavelet and Scale coefficients for those combinations of time and scale can be set to mirror those where undisturbed background can be found and the difference between these newly adapted values and the original ones would conform the Spikes series.
+One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform. In the transformed time series, it is possible to see which time scales are more affected by fluctuations and rare events while these are ongoing. 
+Then, the Wavelet and Scale coefficients for those combinations of time and scale can be set to mirror those where undisturbed background can be found and the difference between these newly adapted values and the original ones would conform the Spikes series.
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgment}
 
-We would like to thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for their valuable insight and collaboration in the setup of the data streaming systems and in the initial exploratory analysis of the data. We would also like to thank Steve Hilditch for his insight into the industry and general support. A. C. E. thanks Stephan Grosskinsky for the initial guidance and support.
+We would like to thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for their valuable insight and collaboration in the setup of the data streaming systems and in the initial exploratory analysis of the data. 
+We would also like to thank Steve Hilditch for his insight into the industry and general support. A. C. E. thanks Stephan Grosskinsky for the initial guidance and support.
 
 
 \begin{thebibliography}{00}
