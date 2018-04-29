@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2017.11.1)  29 APR 2018 16:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2017.11.1)  29 APR 2018 19:19
 entering extended mode
 **./IEEE_Alvaro.tex
 (IEEE_Alvaro.tex
@@ -408,11 +408,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 54--58
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 62--66
-[]\OT1/ptm/m/n/10 The UK Na-tional Traf-fic In-for-ma-tion Sys-tem (NTIS)
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 62--66
 
  []
@@ -435,12 +430,8 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 79.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: Reference `fig:map' on page 1 undefined on input line 79.
-
-[1{C:/Users/CabrejasEgeaAlvaro/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.ma
-p}
+) [1{C:/Users/CabrejasEgeaAlvaro/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.
+map}
 
 
 ]
@@ -449,106 +440,121 @@ Underfull \hbox (badness 2735) in paragraph at lines 81--82
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--98
+Underfull \hbox (badness 10000) in paragraph at lines 112--114
 
  []
 
 <./images/Traveltime_example.png, id=10, 513.41812pt x 285.31593pt>
 File: ./images/Traveltime_example.png Graphic file (type png)
 <use ./images/Traveltime_example.png>
-Package pdftex.def Info: ./images/Traveltime_example.png  used on input line 10
-5. on input line 105.
-Package pdftex.def Info: Requested size: 252.0pt x 140.04112pt on input line 10
-5.
-<./images/EWMA.pdf, id=11, pagebox=cropbox, 1156.32pt x 505.89pt>
+Package pdftex.def Info: ./images/Traveltime_example.png  used on input line 11
+6. on input line 116.
+Package pdftex.def Info: Requested size: 252.0pt x 140.04112pt on input line 11
+6.
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--126
+
+ []
+
+[2 <./images/Traveltime_example.png>]
+<./images/EWMA.pdf, id=20, pagebox=cropbox, 1156.32pt x 505.89pt>
 File: ./images/EWMA.pdf Graphic file (type pdf)
 <use ./images/EWMA.pdf>
-Package pdftex.def Info: ./images/EWMA.pdf  used on input line 133. on input li
-ne 133.
-Package pdftex.def Info: Requested size: 252.0pt x 110.24632pt on input line 13
-3.
-[2 <./images/Traveltime_example.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 179--183
+Package pdftex.def Info: ./images/EWMA.pdf  used on input line 150. on input li
+ne 150.
+Package pdftex.def Info: Requested size: 252.0pt x 110.24632pt on input line 15
+0.
 
+Underfull \hbox (badness 2027) in paragraph at lines 186--187
+[]\OT1/ptm/m/n/10 Oscillates with great am-pli-tude and low inter-
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 184--185
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 186--190
-
- []
-
-<./images/BS.pdf, id=21, pagebox=cropbox, 1156.32pt x 505.89pt>
-File: ./images/BS.pdf Graphic file (type pdf)
-<use ./images/BS.pdf>
-Package pdftex.def Info: ./images/BS.pdf  used on input line 222. on input line
- 222.
-Package pdftex.def Info: Requested size: 239.39923pt x 104.73477pt on input lin
-e 222.
-[3 <./images/EWMA.pdf> <./images/BS.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 245--249
-
- []
-
-
-LaTeX Warning: Reference `ref:delta' on page 4 undefined on input line 284.
-
-<./images/new_flow.png, id=39, 540.51938pt x 529.22719pt>
+<./images/new_flow.png, id=21, 540.51938pt x 529.22719pt>
 File: ./images/new_flow.png Graphic file (type png)
 <use ./images/new_flow.png>
-Package pdftex.def Info: ./images/new_flow.png  used on input line 287. on inpu
-t line 287.
-Package pdftex.def Info: Requested size: 239.39923pt x 234.39499pt on input lin
-e 287.
-<./images//finalplots/m6_q.pdf, id=40, pagebox=cropbox, 867.24pt x 650.43pt>
+Package pdftex.def Info: ./images/new_flow.png  used on input line 193. on inpu
+t line 193.
+Package pdftex.def Info: Requested size: 252.0pt x 246.73412pt on input line 19
+3.
+
+Underfull \hbox (badness 10000) in paragraph at lines 202--206
+
+ []
+
+[3 <./images/EWMA.pdf> <./images/new_flow.png>]
+Underfull \hbox (badness 1546) in paragraph at lines 207--209
+\OT1/ptm/m/n/10 this de-com-po-si-tion, for this step, all travel times were
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 207--209
+
+ []
+
+<./images/BS.pdf, id=34, pagebox=cropbox, 1156.32pt x 505.89pt>
+File: ./images/BS.pdf Graphic file (type pdf)
+<use ./images/BS.pdf>
+Package pdftex.def Info: ./images/BS.pdf  used on input line 216. on input line
+ 216.
+Package pdftex.def Info: Requested size: 252.0pt x 110.24632pt on input line 21
+6.
+
+Underfull \hbox (badness 10000) in paragraph at lines 221--222
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 265--269
+
+ []
+
+[4 <./images/BS.pdf>]
+<./images//finalplots/m6_q.pdf, id=43, pagebox=cropbox, 867.24pt x 650.43pt>
 File: ./images//finalplots/m6_q.pdf Graphic file (type pdf)
 <use ./images//finalplots/m6_q.pdf>
-Package pdftex.def Info: ./images//finalplots/m6_q.pdf  used on input line 305.
- on input line 305.
-Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 30
-5.
-<./images//finalplots/m11_q.pdf, id=41, pagebox=cropbox, 867.24pt x 650.43pt>
+Package pdftex.def Info: ./images//finalplots/m6_q.pdf  used on input line 318.
+ on input line 318.
+Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 31
+8.
+<./images//finalplots/m11_q.pdf, id=44, pagebox=cropbox, 867.24pt x 650.43pt>
 File: ./images//finalplots/m11_q.pdf Graphic file (type pdf)
 <use ./images//finalplots/m11_q.pdf>
-Package pdftex.def Info: ./images//finalplots/m11_q.pdf  used on input line 312
-. on input line 312.
-Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 31
-2.
-<./images//finalplots/m25_q.pdf, id=42, pagebox=cropbox, 867.24pt x 650.43pt>
+Package pdftex.def Info: ./images//finalplots/m11_q.pdf  used on input line 325
+. on input line 325.
+Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 32
+5.
+<./images//finalplots/m25_q.pdf, id=45, pagebox=cropbox, 867.24pt x 650.43pt>
 File: ./images//finalplots/m25_q.pdf Graphic file (type pdf)
 <use ./images//finalplots/m25_q.pdf>
-Package pdftex.def Info: ./images//finalplots/m25_q.pdf  used on input line 319
-. on input line 319.
-Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 31
-9.
-<./images//finalplots/m6_dt.pdf, id=43, pagebox=cropbox, 867.24pt x 650.43pt>
+Package pdftex.def Info: ./images//finalplots/m25_q.pdf  used on input line 332
+. on input line 332.
+Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 33
+2.
+<./images//finalplots/m6_dt.pdf, id=46, pagebox=cropbox, 867.24pt x 650.43pt>
 File: ./images//finalplots/m6_dt.pdf Graphic file (type pdf)
 <use ./images//finalplots/m6_dt.pdf>
-Package pdftex.def Info: ./images//finalplots/m6_dt.pdf  used on input line 333
-. on input line 333.
-Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 33
-3.
-[4 <./images/new_flow.png>]
-<./images//finalplots/m11_dt.pdf, id=47, pagebox=cropbox, 867.24pt x 650.43pt>
+Package pdftex.def Info: ./images//finalplots/m6_dt.pdf  used on input line 346
+. on input line 346.
+Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 34
+6.
+ [5 <./images//finalplots/m6_q.pdf> <./images//finalplots/m11_q.pdf> <./images/
+/finalplots/m25_q.pdf>]
+<./images//finalplots/m11_dt.pdf, id=65, pagebox=cropbox, 867.24pt x 650.43pt>
 File: ./images//finalplots/m11_dt.pdf Graphic file (type pdf)
 <use ./images//finalplots/m11_dt.pdf>
-Package pdftex.def Info: ./images//finalplots/m11_dt.pdf  used on input line 34
-0. on input line 340.
+Package pdftex.def Info: ./images//finalplots/m11_dt.pdf  used on input line 35
+3. on input line 353.
 Package pdftex.def Info: Requested size: 239.39923pt x 179.54865pt on input lin
-e 340.
-<./images//finalplots/m25_dt.pdf, id=48, pagebox=cropbox, 867.24pt x 650.43pt>
+e 353.
+<./images//finalplots/m25_dt.pdf, id=66, pagebox=cropbox, 867.24pt x 650.43pt>
 File: ./images//finalplots/m25_dt.pdf Graphic file (type pdf)
 <use ./images//finalplots/m25_dt.pdf>
-Package pdftex.def Info: ./images//finalplots/m25_dt.pdf  used on input line 34
-7. on input line 347.
-Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 34
-7.
- [5 <./images//finalplots/m6_q.pdf> <./images//finalplots/m11_q.pdf> <./images/
-/finalplots/m25_q.pdf> <./images//finalplots/m6_dt.pdf>]
+Package pdftex.def Info: ./images//finalplots/m25_dt.pdf  used on input line 36
+0. on input line 360.
+Package pdftex.def Info: Requested size: 252.0pt x 188.99701pt on input line 36
+0.
+ [6 <./images//finalplots/m6_dt.pdf> <./images//finalplots/m11_dt.pdf> <./image
+s//finalplots/m25_dt.pdf>]
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -560,34 +566,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[6 <./images//finalplots/m11_dt.pdf> <./images//finalplots/m25_dt.pdf>]
-(IEEE_Alvaro.aux)
+[7
 
-LaTeX Warning: There were undefined references.
-
- ) 
+] (IEEE_Alvaro.aux) ) 
 Here is how much of TeX's memory you used:
- 3941 strings out of 493313
- 59464 string characters out of 3138779
- 122938 words of memory out of 3000000
- 7416 multiletter control sequences out of 15000+200000
+ 3939 strings out of 493313
+ 59444 string characters out of 3138779
+ 120938 words of memory out of 3000000
+ 7414 multiletter control sequences out of 15000+200000
  42822 words of font info for 87 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,9n,26p,843b,243s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfon
-ts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C
-:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/
-type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
-tmri8a.pfb>
-Output written on IEEE_Alvaro.pdf (6 pages, 774604 bytes).
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<
+C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Progr
+am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files
+/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/Program File
+s/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/font
+s/type1/urw/times/utmri8a.pfb>
+Output written on IEEE_Alvaro.pdf (7 pages, 776844 bytes).
 PDF statistics:
- 120 PDF objects out of 1000 (max. 8388607)
+ 125 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  51 words of extra memory for PDF output out of 10000 (max. 10000000)
 
