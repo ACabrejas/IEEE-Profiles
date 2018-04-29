@@ -11,23 +11,24 @@
 \graphicspath{{./images/}}
 \begin{document}
 
-\title{Estimating Baseline Travel Times for the Strategic Road Network
-\thanks{Thanks to EPSRC and Thales UK.}
+\title{Estimating Baseline Travel Times for the UK Strategic Road Network
+%\thanks{Thanks to EPSRC and Thales UK.}
 }
 
 \author{\IEEEauthorblockN{Alvaro Cabrejas Egea}
-\IEEEauthorblockA{\textit{Centre for Complexity Science} \\
+\IEEEauthorblockA{\textit{MathSys Centre for Doctoral Training} \\
 \textit{University of Warwick}\\
 Coventry, United Kingdom \\
 a.cabrejas-egea@warwick.ac.uk}
 \and
 \IEEEauthorblockN{Peter de Ford}
-\IEEEauthorblockA{\textit{McKinsey*} \\
+\IEEEauthorblockA{\textit{McKinsey \& Company} \\
 	San Jose, Costa Rica \\
 	pdeford@outlook.com}
 \and
 \IEEEauthorblockN{Colm Connaughton}
-\IEEEauthorblockA{\textit{Centre for Complexity Science} \\
+\IEEEauthorblockA{\textit{Warwick Mathematics Institute} \\
+\textit{\& Centre for Complexity Science} \\
 \textit{University of Warwick}\\
 Coventry, United Kingdom \\
 c.p.connaughton@warwick.ac.uk}
@@ -36,9 +37,7 @@ c.p.connaughton@warwick.ac.uk}
 \maketitle
 
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eget orci quis neque efficitur fringilla in vitae nisl. Nam mollis pellentesque arcu. Donec laoreet sapien in dapibus semper. Mauris vel malesuada libero. Morbi cursus erat ac arcu mattis, id venenatis nibh commodo. Donec dui eros, volutpat et dignissim sit amet, vehicula sit amet urna. Fusce pharetra mi enim, vitae dignissim felis pharetra id. Mauris quis purus scelerisque, mollis diam sit amet, aliquet urna. Nullam a aliquet ex. Integer in nisi eget leo sodales iaculis quis eget leo. Vestibulum ornare ante ut sapien pretium, ac cursus magna blandit. Donec semper, nisi id luctus porttitor, purus nisi varius diam, quis porttitor justo magna id neque. Aliquam bibendum non purus sit amet lobortis. Nullam id pellentesque orci, vitae vestibulum velit.
-
-Maecenas vulputate iaculis erat. Pellentesque blandit nisl at felis finibus, sed mollis ipsum varius. Pellentesque eros mi, eleifend sit amet dui eget, bibendum ultricies nisi. Ut non dui in nulla dictum finibus at et erat. Vivamus ultrices, arcu quis pulvinar pellentesque, sapien sapien rutrum ex, ac gravida erat nibh a mi. Nam ut.
+We present a new method for estimating how the expected travel time for links on the UK Strategic Road Network varies with time.  The approach is based on a time series analysis of travel time data from the UK's National Traffic Information Service (NTIS).  Time series of travel times are characterised by a noisy background variation exhibiting the expected daily and weekly patterns punctuated by large spikes associated with congestion events. Some of these spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. Our algorithm uses thresholding to split the time series into background and spike signals, each of which is analysed separately. The daily and weekly periodic variation of the background signal is extracted using spectral filtering. The periodic part of the spike signal is extracted using the Seasonal-Trend Decomposition based on LOESS (STL) algorithm. The final estimated travel time is obtained by recombining these two. We assess our method by cross-validation for several UK motorways. We use 6 weeks of training data and calculate the mean absolute percentage error of the resulting travel time estimates for 3 subsequent weeks of test data. We find that the relative error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -370,11 +369,8 @@ One potential way of reaching total compliance with these requirements is to per
 In the transformed time series, it is possible to see which time scales are more affected by fluctuations and rare events while these are ongoing. 
 Then, the Wavelet and Scale coefficients for those combinations of time and scale can be set to mirror those where undisturbed background can be found and the difference between these newly adapted values and the original ones would conform the Spikes series.
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
-\section*{Acknowledgment}
-
-We would like to thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for their valuable insight and collaboration in the setup of the data streaming systems and in the initial exploratory analysis of the data. 
-We would also like to thank Steve Hilditch for his insight into the industry and general support. 
-A. C. E. thanks Stephan Grosskinsky for the initial guidance, discussions and support.
+\section*{Acknowledgments}
+This work was part funded by the EPSRC under grant no. EP/L015374. We are also grateful to the London Mathematical Laboratory for additional financial support. We thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for assistance with exploratory data analysis. We also thank Steve Hilditch and Thales Ground Transportation Systems, UK for help understanding the NTIS system.  A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and support.
 
 
 \begin{thebibliography}{00}
