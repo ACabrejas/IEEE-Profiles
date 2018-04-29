@@ -37,7 +37,17 @@ c.p.connaughton@warwick.ac.uk}
 \maketitle
 
 \begin{abstract}
-We present a new method for estimating how the expected travel time for links on the UK Strategic Road Network varies with time.  The approach is based on a time series analysis of travel time data from the UK's National Traffic Information Service (NTIS).  Time series of travel times are characterised by a noisy background variation exhibiting the expected daily and weekly patterns punctuated by large spikes associated with congestion events. Some of these spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. Our algorithm uses thresholding to split the time series into background and spike signals, each of which is analysed separately. The daily and weekly periodic variation of the background signal is extracted using spectral filtering. The periodic part of the spike signal is extracted using the Seasonal-Trend Decomposition based on LOESS (STL) algorithm. The final estimated travel time is obtained by recombining these two. We assess our method by cross-validation for several UK motorways. We use 6 weeks of training data and calculate the mean absolute percentage error of the resulting travel time estimates for 3 subsequent weeks of test data. We find that the relative error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
+We present a new method for estimating how the expected travel time for links on the UK Strategic Road Network varies with time.  
+The approach is based on a time series analysis of travel time data from the UK's National Traffic Information Service (NTIS).  
+Time series of travel times are characterised by a noisy background variation exhibiting the expected daily and weekly patterns punctuated by large spikes associated with congestion events. 
+Some of these spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. 
+Our algorithm uses thresholding to split the time series into background and spike signals, each of which is analysed separately. 
+The daily and weekly periodic variation of the background signal is extracted using spectral filtering. 
+The periodic part of the spike signal is extracted using the Seasonal-Trend Decomposition based on LOESS (STL) algorithm. 
+The final estimated travel time is obtained by recombining these two. 
+We assess our method by cross-validation for several UK motorways. 
+We use 6 weeks of training data and calculate the mean absolute percentage error of the resulting travel time estimates for 3 subsequent weeks of test data. 
+We find that the relative error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -370,7 +380,11 @@ In the transformed time series, it is possible to see which time scales are more
 Then, the Wavelet and Scale coefficients for those combinations of time and scale can be set to mirror those where undisturbed background can be found and the difference between these newly adapted values and the original ones would conform the Spikes series.
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
-This work was part funded by the EPSRC under grant no. EP/L015374. We are also grateful to the London Mathematical Laboratory for additional financial support. We thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for assistance with exploratory data analysis. We also thank Steve Hilditch and Thales Ground Transportation Systems, UK for help understanding the NTIS system.  A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and support.
+This work was part funded by the EPSRC under grant no. EP/L015374. 
+We are also grateful to the London Mathematical Laboratory for additional financial support. 
+We thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for assistance with exploratory data analysis. 
+We also thank Steve Hilditch and Thales Ground Transportation Systems, UK for help understanding the NTIS system.  
+A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and support.
 
 
 \begin{thebibliography}{00}
