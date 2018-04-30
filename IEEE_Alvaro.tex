@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[conference, letterpaper]{IEEEtran}
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 \usepackage{cite}
@@ -21,7 +21,7 @@
 Coventry, United Kingdom \\
 a.cabrejas-egea@warwick.ac.uk}
 \and
-\IEEEauthorblockN{Peter de Ford}
+\IEEEauthorblockN{Peter De Ford}
 \IEEEauthorblockA{\textit{McKinsey \& Company} \\
 	San Jose, Costa Rica \\
 	pdeford@outlook.com}
@@ -51,7 +51,7 @@ We find that the relative error is significantly reduced compared to estimates o
 \end{abstract}
 
 \begin{IEEEkeywords}
-Traffic, Congestion, Intelligent Algorithms
+Travel Time, Traffic Congestion, Prediction
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -86,8 +86,9 @@ Currently, generating these profiles makes use of a combination of an Exponentia
 \subsection{Data Selection}
 \begin{itemize}
 	\item Link-level data was extracted for sections of the M6, M11 and M25 motorways in England.
-	\item The dataset for M6 and M11 comprises 90 days of data (07/03/2016-05/06/2016).
-	\item The dataset for M25 comprises 75 days of data (07/04/2017-20/06/2017).
+	\item The dataset for M6 comprises 90 days of data (07/03/2016-05/06/2016) across 14 links.
+	\item The dataset for d M11 comprises 90 days of data (07/03/2016-05/06/2016) across 25 links.
+	\item The dataset for M25 comprises 75 days of data (07/04/2017-20/06/2017) across 61 links.
 	\item Links with more than 10\% of missing data were discarded.
 	\item Whenever missing data was detected for 10 or less minutes, it was linearly interpolated.
 	\item Whenever missing data was detected for over 10 minutes, it was left as missing values.
