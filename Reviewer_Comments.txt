@@ -1,0 +1,52 @@
+Comments from Editor:
+The reference list is extremely lean. The paper should
+include more relevant (travel time estimation, travel time
+distribution estimation) recent literature. 
+
+
+Comments from Reviewer 1:
+The paper presents an algorithm to predict the travel times
+on a motorway given the training data could have spikes.
+The paper is interesting especially from the practical
+point of view and it could be of interest to road
+practitioners.
+
+The paper could be improved by:
+1- providing some more clarification on the seasonality
+terms, which I could not undrestand what they exactly are
+demonstrating.
+
+2- Providing some limitations of the algorithm and expected
+accuracy of the predictions and duration of predictions
+that we can expect those accuracy. 
+
+3- I am still not confident the algorithm of the paper can
+be applied in practice for proactive road operations, or
+accident event detections. Please elaborate on this.
+
+
+Comments from Reviewer 2:
+The paper presents the estimation of travel time based on
+an algorithm using steps that have heuristics involved. 
+The algorithm is not developed in a methodical way.  The
+travel time concept is not discussed or even presented in a
+scientific way.  The paper dives into a case study right
+from the start rather than first developing and discussing
+"travel time" and what is involved in its relationship to
+the various variables used. 
+
+
+Comments from Reviewer 3:
+The structure of the manuscript looks like a report rather
+than a scientific paper. There is a rich literature on
+travel time estimation methods which obviously the authors
+ignored in this paper. For the revised version please do
+the following:
+1. Restructure the paper (first clarify the contribution by
+referring to the existing works in the literature).
+2. Present your approach clearly
+3. Compare with few existing methods.
+4. Elaborate the results in a comprehensive way.
+
+The contribution of this work is not that clear to the
+reader.  
