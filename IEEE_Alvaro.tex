@@ -43,10 +43,10 @@ Time series of travel times are characterised by a noisy background variation ex
 Some of these spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. 
 Our algorithm uses thresholding to split the time series into background and spike signals, each of which is analysed separately. 
 The the background signal is extracted using spectral filtering. 
-The periodic part of the spike signal is extracted using the Seasonal-Trend Decomposition based on LOESS (STL) algorithm. 
+The periodic part of the spike signal is extracted using locally weighted regression (LWR). 
 The final estimated travel time is obtained by recombining these two. 
-We assess our method by cross-validation for several UK motorways. 
-We use 8 weeks of training data and calculate the mean absolute percentage error of the resulting travel time estimates for week of test data, repeating this process 4 times. 
+We assess our method by cross-validating in several UK motorways. 
+We use 8 weeks of training data and calculate the mean absolute percentage error (MAPE) of the resulting travel time estimates for week of test data, repeating this process 4 times. 
 We find that the MAPE is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 \end{abstract}
 
@@ -55,11 +55,6 @@ Travel Time, Traffic Congestion, Prediction
 \end{IEEEkeywords}
 
 \section{Introduction}
-Investment in the infrastructure of transport systems is an essential driver for the economy \cite{government}. 
-In developed countries such as the UK, there is limited capability to increase the physical capacity of the transport infrastructure. 
-This is specifically the case for the Strategic Road Network, comprising approximately 4,400 miles of motorways and major trunk roads across England \cite{Strategic}. 
-Current transportation policy and research is focused on Intelligent Mobility rather that the construction of new infrastructure: in the context of road transport, Intelligent Mobility aims to utilise new technologies and real-time data to improve the capacity and efficiency of existing physical infrastructure \cite{needs}.\\
-
 The UK is considered world-leading in its ability to collect and process real-time data from its road network. 
 Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
 Highways England collects data of the speed, flow, travel time and other data on the Strategic Road Network using sensors on the road and in vehicles. 
@@ -80,13 +75,9 @@ The links on the network incorporate thousands of induction loops (sensors) at d
 
 NTIS data is being used to assign a traffic profile to each link on the network. 
 A link's profile contains the expected travel time at any given time of day, understood as the average time to transverse said link.
-
 These profiles use historical travel time data within the same link to provide expected future travel times.\\
 
-Operating modern Smart Motorways in the UK revolves around the use of these traffic profiles; operators rely on them to identify deviations, take corrective actions and display accurate information on the overhead signs. 
-In this scope, better profiles means more accuracy for the whole system.\\
-
-Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent segmentation, although the exact methodology is not public. 
+Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not public. 
 
 
 \subsection{Data Selection}
@@ -459,9 +450,6 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 
 
 \begin{thebibliography}{00}
-\bibitem{government} A. J. Venables, J. Laird and H. Overman, "Transport investment and economic performance: Implications for project appraisal". Technical Report, United Kingdom Department for Transport, October 2014.
-\bibitem{Strategic} N. Peluffo, "Strategic road network statistics". Technical Report, United Kingdom Department for Transport, January 2015.
-\bibitem{needs} P. Wockatz and P. Schartau, "Traveller needs and UK capability study", Technical Report, Transport Systems Catapult, October 2015.
 \bibitem{NTIS} The Highways Agency, "National Transport Information System Publish Services", Technical Report, 2011. 
 \bibitem{STL} R. B. Cleveland, W. S. Cleveland, J. E. McRae and I. Terpenning, "STL: A Seasonal-Trend Decomposition Procedure Based on Loess", Journal of Official Statistics, vol. 6, 1990, pp. 3-73.
 \bibitem{forecasting} R. J. Hyndman and G. Athanasopoulos, "Forecasting: Principles and Practice", Otexts, 2013.
