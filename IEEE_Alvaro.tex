@@ -58,26 +58,28 @@ Travel Time, Traffic Congestion, Prediction
 The UK is considered world-leading in its ability to collect and process real-time data from its road network. 
 Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
 Highways England collects data of the speed, flow, travel time and other data on the Strategic Road Network using sensors on the road and in vehicles. 
-These are operated by Thales UK in collaboration with other partners.\\
+The basic building blocks of the Strategic Road Network are the so-called links. 
+They are segments of motorway, with a length varying between 500 and over 6000 meters. 
+The links on the network incorporate thousands of induction loops at different sites, which report their measurements to a centralised system.\\
 
-Here, novel methods for generating profiles are investigated, such that they do not require segmentation, clustering or an underlying model, and that can be computed by only using statistical and spectral analysis of previous data.
+NTIS data is used to assign a traffic profile to each link on the network. 
+Each profile contains the expected travel time at any given time of day, understood as the average time to transverse said link with a resolution of one minute.
+These profiles use historical travel time data within the same link to provide expected future travel times.\\
 
-The available literature on travel times is extensive but most recent research in focuses on short-term forecasting
+Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not public. 
+\\
+
+Here, using NTIS travel time data, a novel method for generating profiles investigated, such that they do not require segmentation, clustering or an underlying model, only requiring statistical and spectral analysis of previous data.
+
+
+The available literature on travel times is extensive but most recent research in focuses on short-term forecasting. From a methodological point of view, different approaches can be found .
 *** HERE BE LIT REVIEW***
 
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
 To test the transferability of this method, it is tested on three different motorways.
 
 \section{Data}
-The basic building blocks of the Strategic Road Network are the so-called links. 
-They are segments of motorway, with a length varying between 500 and over 6000 meters. 
-The links on the network incorporate thousands of induction loops (sensors) at different sites, which report their measurements to a centralised system.\\
 
-NTIS data is being used to assign a traffic profile to each link on the network. 
-A link's profile contains the expected travel time at any given time of day, understood as the average time to transverse said link.
-These profiles use historical travel time data within the same link to provide expected future travel times.\\
-
-Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not public. 
 
 
 \subsection{Data Selection}
@@ -160,7 +162,7 @@ This dependence on experienced teams can lead to the creation of legacy systems 
 \end{figure}
 
 
-\section{Algorithm} \label{algorithm}
+\section{Travel Time Prediction Algorithm} \label{algorithm}
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{./images/finalplots/ACF_M6_Link3.pdf}}
@@ -310,12 +312,11 @@ Note that this should be applied to the $n$ training weeks as a single time seri
 	\item Add Spike's Seasonal component to the output of 8) to output from 9)
 \end{enumerate}
 \subsection{Seasonal-Spectral Hybrid Profile}
-In order to create the final Seasonal-Spectral Hybrid profile, referred to as Hybrid in the following sections, one of the two forecasts generated in the previous points is taken, depending on what is the identified regime, as described in 
+In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of the two forecasts generated in the previous points is taken, depending on what is the identified regime, as described in 
 
 \begin{equation}
-Hybrid = Seasonal * \delta_{spike} + Spectral * (1 - \delta_{spike})
+\textrm{Hybrid} = \textrm{Seasonal} * \delta_{\textrm{spike}} + \textrm{Spectral} * (1 - \delta_{\textrm{spike}})
 \end{equation}
-Where $\delta_{spike}$ is the indicator function defined in Equation \eqref{eq:delta}.
 
 \section{Accuracy Results}
 In this section the accuracy of the algorithm described above is compared against the Published Profiles and the NS Model. 
@@ -331,10 +332,9 @@ In the case of the Motorways the Root Mean Squared Error (RMSE) has been calcula
 In both cases the error for a Link is defined as the average MAPE or RMSE across all prediction points.
 The error for a Motorway is defined as the average of the error across all its links.
 \subsection{Accuracy by Quantile}
-In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the Null Profile across all percentiles of travel time.
-As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the NS Model for all percentiles of travel time except for the most extreme values where they all perform poorly.\\
-The most relevant difference occurs between percentiles $[60-95]$, where the Published Profile starts to suffer from higher inaccuracy, due to some extreme events in the shorter links. 
-In all cases, the Hybrid model is the one that requires greater travel times to reach a $20\%$ error in the prediction.
+Here, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across all percentiles of travel time.
+As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all percentiles of travel time except for the most extreme values where they all perform poorly.\\
+The most meaningful difference occurs between percentiles $[50-95]$, where the Published Profile starts to suffer from higher inaccuracy.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{/finalplots/m6_q.pdf}}
 	\caption{Average accuracy results in M6 across percentiles of travel time.}
@@ -356,8 +356,8 @@ In all cases, the Hybrid model is the one that requires greater travel times to 
 \end{figure}
 
 \subsection{Daytime Error}
-In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the Null Profile across the times of the day.
-As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the Null Model for all times of the day, all locations and training lengths. 
+In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across the times of the day.
+As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the NS Model for all times of the day, all locations and training lengths. 
 The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles.\\
 In the case of the M6 and M11, where the training set is richer, the error at peak times is reduced by at least 50\% in all cases, reaching as much as 68.7\% in the case of the M6 morning rush.
 In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the methods used to calculate the Published Profile, this recurrent congestion is better captured by it, without the congestion being lighter in intensity than in the cases for the M6 and M11. 
