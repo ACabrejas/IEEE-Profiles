@@ -66,8 +66,7 @@ NTIS data is used to assign a traffic profile to each link on the network.
 Each profile contains the expected travel time at any given time of day, understood as the average time to transverse said link with a resolution of one minute.
 These profiles use historical travel time data within the same link to provide expected future travel times.\\
 
-Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not public. 
-\\
+Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not made public. \\
 
 Here, using NTIS travel time data, a novel method for generating profiles investigated, such that they do not require segmentation, clustering or an underlying model, only requiring statistical and spectral analysis of previous data.
 
@@ -95,27 +94,17 @@ To test the transferability of this method, it is tested on three different moto
 The first two motorways were selected due to their high usage and combination of recurrent and outstanding congestion. 
 The M25 was selected on the base that it is the most used Motorway in England on a daily basis, suffering from chronic congestion.
 \subsection{Data Contents}
-For each link on a specific date, the data consists of one entry per minute, containing:
+For each link on a specific date, the required data consists of one entry per minute, containing:
 \begin{itemize}
-	\item Traffic speed
-	\item Traffic flow
-	\item Traffic headway.
-	\item Current travel time
-	\item Profile travel time 
-	\item Free flow travel time
-	\item Event flags for:
-	\begin{itemize}
-		\item Spontaneous congestion events
-		\item Weather events 
-		\item Other unspecified types of events.
-	\end{itemize} 	
+	\item Measured travel time
+	\item Profile (expected) travel time 	
 \end{itemize}
 
 \subsection{Training and Testing Data}
-In the case of the M6 and M11, the data comprises 12 complete weeks of travel time. The previous 8 weeks are used to predict the following 4. 
-However, in an attempt to more closely simulate real operation, it was assumed that new measurements were received at the end of every week, allowing for an updated prediction using the new measurements in addition to the last 7 of the original 8 weeks used for training, effectively working on a rolling basis.\\
+In the case of the M6 and M11, the data comprises 12 complete weeks of travel time. The previous 8 weeks are used to predict one week ahead.
+One week later, the process is repeated, deleting the oldest week of training data and incorporating measurements of the week predicted in the previous step. This is done 4 times.\\
 In the case of the M25, the dataset comprised 9 complete weeks. 
-Hence, 6 weeks of data were used to predict the following 3 in the same manner as described in the previous paragraph.
+Hence, 6 weeks of data were used for training and the process as described above is done 3 times.
 
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
@@ -332,9 +321,6 @@ In the case of the Motorways the Root Mean Squared Error (RMSE) has been calcula
 In both cases the error for a Link is defined as the average MAPE or RMSE across all prediction points.
 The error for a Motorway is defined as the average of the error across all its links.
 \subsection{Accuracy by Quantile}
-Here, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across all percentiles of travel time.
-As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all percentiles of travel time except for the most extreme values where they all perform poorly.\\
-The most meaningful difference occurs between percentiles $[50-95]$, where the Published Profile starts to suffer from higher inaccuracy.
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{/finalplots/m6_q.pdf}}
 	\caption{Average accuracy results in M6 across percentiles of travel time.}
@@ -354,14 +340,11 @@ The most meaningful difference occurs between percentiles $[50-95]$, where the P
 	\caption{Link average accuracy results in M25 across percentiles of travel time.}
 	\label{fig:m25q}
 \end{figure}
+Here, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across all percentiles of travel time.
+As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all percentiles of travel time except for the most extreme values where they all perform poorly.\\
+The most meaningful difference occurs between percentiles $[50-95]$, where the Published Profile starts to suffer from higher inaccuracy.
 
 \subsection{Daytime Error}
-In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across the times of the day.
-As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the NS Model for all times of the day, all locations and training lengths. 
-The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles.\\
-In the case of the M6 and M11, where the training set is richer, the error at peak times is reduced by at least 50\% in all cases, reaching as much as 68.7\% in the case of the M6 morning rush.
-In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the methods used to calculate the Published Profile, this recurrent congestion is better captured by it, without the congestion being lighter in intensity than in the cases for the M6 and M11. 
-Even in this case, the proposed algorithm performs significantly better than any of the other two, except for a brief window between 6-7AM when it is outperformed by the NS Model.
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=\linewidth]{/finalplots/m6_dt.pdf}
@@ -382,6 +365,13 @@ Even in this case, the proposed algorithm performs significantly better than any
 	\caption{Link average accuracy results in M25 across times of the day.}
 	\label{fig:m25daytime}
 \end{figure}
+
+In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across the times of the day.
+As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the NS Model for all times of the day, all locations and training lengths. 
+The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles.\\
+In the case of the M6 and M11, where the training set is richer, the error at peak times is reduced by at least 50\% in all cases, reaching as much as 68.7\% in the case of the M6 morning rush.
+In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the methods used to calculate the Published Profile, this recurrent congestion is better captured by it, without the congestion being lighter in intensity than in the cases for the M6 and M11. 
+Even in this case, the proposed algorithm performs significantly better than any of the other two, except for a brief window between 6-7AM when it is outperformed by the NS Model.
 
 \begin{table}[htbp]
 	\caption{MAPE per Link on M6}
@@ -443,13 +433,13 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \section{Future Work}
-The algorithm supplied above meets all the requirements described in Section \ref{algorithm} except for the fact that it requires a heuristically set threshold. 
+The algorithm supplied above meets all the requirements described in Section \ref{algorithm} except that it requires a heuristically set threshold. 
 One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet and Scale coefficients oscillate over time. 
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
 This work was part funded by the EPSRC under grant no. EP/L015374. 
 We are also grateful to the London Mathematical Laboratory for additional financial support. 
-We thank Ayman Boustati, Laura Guzman Rincon and Guillem Mosquera Donate for assistance with exploratory data analysis. 
+We thank Ayman Boustati, Laura Guzman and Guillem Mosquera for assistance with exploratory data analysis. 
 We also thank Steve Hilditch and Thales Ground Transportation Systems, UK for help understanding the NTIS system.  
 A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and support.
 
