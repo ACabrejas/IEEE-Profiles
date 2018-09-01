@@ -425,7 +425,7 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \begin{table}[htbp]
-	\caption{Global MAPE per Motorway}
+	\caption{Global MAPE \& RMSE per Motorway}
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
@@ -444,9 +444,7 @@ Even in this case, the proposed algorithm performs significantly better than any
 
 \section{Future Work}
 The algorithm supplied above meets all the requirements described in Section \ref{algorithm} except for the fact that it requires a heuristically set threshold. 
-One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform. 
-In the Wavelet transformed time series, it is possible to see which time scales are more affected by fluctuations and rare events while these are ongoing. 
-Then, the Wavelet and Scale coefficients for those combinations of time and scale can be set to mirror those where undisturbed background can be found and the difference between these newly adapted values and the original ones would conform the Spikes series.
+One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet and Scale coefficients oscillate over time. 
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
 This work was part funded by the EPSRC under grant no. EP/L015374. 
