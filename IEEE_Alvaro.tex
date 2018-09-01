@@ -37,17 +37,17 @@ c.p.connaughton@warwick.ac.uk}
 \maketitle
 
 \begin{abstract}
-We present a new method for estimating how the expected travel time for links on the UK Strategic Road Network varies with time.  
+We present a new method for long-term estimation of the expected travel time for links on the UK Strategic Road Network and their variation with time.  
 The approach is based on a time series analysis of travel time data from the UK's National Traffic Information Service (NTIS).  
 Time series of travel times are characterised by a noisy background variation exhibiting the expected daily and weekly patterns punctuated by large spikes associated with congestion events. 
 Some of these spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. 
 Our algorithm uses thresholding to split the time series into background and spike signals, each of which is analysed separately. 
-The daily and weekly periodic variation of the background signal is extracted using spectral filtering. 
+The the background signal is extracted using spectral filtering. 
 The periodic part of the spike signal is extracted using the Seasonal-Trend Decomposition based on LOESS (STL) algorithm. 
 The final estimated travel time is obtained by recombining these two. 
 We assess our method by cross-validation for several UK motorways. 
-We use 6 weeks of training data and calculate the mean absolute percentage error of the resulting travel time estimates for 3 subsequent weeks of test data. 
-We find that the relative error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
+We use 8 weeks of training data and calculate the mean absolute percentage error of the resulting travel time estimates for week of test data, repeating this process 4 times. 
+We find that the MAPE is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -67,15 +67,21 @@ These are operated by Thales UK in collaboration with other partners.\\
 
 Here, novel methods for generating profiles are investigated, such that they do not require segmentation or an underlying model, and that can be computed by only using statistical and spectral analysis of previous data.
 
+
+*** HERE BE LIT REVIEW***
+
+Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
+To test the transferability of this method, it is tested on three different motorways.
+
 \section{Data}
-The NTIS employs a directed network model to represent the major roads in England; wherever a road encounters a diversion, a node is placed on the network and an edge is placed following the motorway.
-The basic building blocks of the system are the so-called links. 
-They are segments of these edges, with a length varying between 500 and over 6000 meters, representing carriageways in the edges between nodes connected by a road. 
+The basic building blocks of the Strategic Road Network are the so-called links. 
+They are segments of motorway, with a length varying between 500 and over 6000 meters. 
 The links on the network incorporate thousands of induction loops (sensors) at different sites, which report their measurements to a centralised system.\\
 
 NTIS data is being used to assign a traffic profile to each link on the network. 
-The profile gives the expected travel time at any time of day for the different sections of the Highway network, understood as the average time to transverse the links for the vehicles currently in it. 
-These profiles use analysis of previous travel times within the same section of road to provide forecasts of expected future travel times and state of traffic.\\
+A link's profile contains the expected travel time at any given time of day, understood as the average time to transverse said link.
+
+These profiles use historical travel time data within the same link to provide expected future travel times.\\
 
 Operating modern Smart Motorways in the UK revolves around the use of these traffic profiles; operators rely on them to identify deviations, take corrective actions and display accurate information on the overhead signs. 
 In this scope, better profiles means more accuracy for the whole system.\\
@@ -164,6 +170,13 @@ This dependence on experienced teams can lead to the creation of legacy systems 
 
 
 \section{Algorithm} \label{algorithm}
+
+\begin{figure}[htbp]
+	\centerline{\includegraphics[width=\linewidth]{./images/finalplots/ACF_M6_Link3.pdf}}
+	\caption{Autocorrelation function of a link in the M6 over a period of 4 weeks, showing seasonal patterns on the daily and weekly periods.}
+	\label{fig:travel_time_example}
+\end{figure}
+
 Given the cyclic nature of traffic, the aim was a prediction algorithm that could account for the periodic variations and endemic congestion while being resilient to fluctuations and rare events. This algorithm also should:
 \begin{itemize}
 	\item Mitigate the propagation of isolated events into future forecasts.
@@ -371,6 +384,65 @@ Even in this case, the proposed algorithm performs significantly better than any
 	\caption{Link average accuracy results in M25 across times of the day.}
 	\label{fig:m25daytime}
 \end{figure}
+
+\begin{table}[htbp]
+	\caption{MAPE per Link on M6}
+	\begin{center}
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Link}&{\textbf{MAPE}} \\
+			\hline
+			117007401& 2.11\%\\
+			\hline
+			117007501& 4.21\%\\
+			\hline
+			117007601& 2.46\%\\
+			\hline
+			117007801& 4.80\%\\
+			\hline
+			117007901& 3.08\%\\
+			\hline
+			117008401& 3.31\%\\
+			\hline
+			117009102& 2.69\%\\
+			\hline
+			117011901& 2.35\%\\
+			\hline
+			117012001& 4.46\%\\
+			\hline
+			117012101& 2.62\%\\
+			\hline
+			117012201& 4.31\%\\
+			\hline
+			117012301& 2.75\%\\
+			\hline
+			117016001& 3.60\%\\
+			\hline
+			123025901& 1.89\%\\
+			\hline
+		\end{tabular}
+		\label{tab1}
+	\end{center}
+	\label{table:m6mape}
+\end{table}
+
+\begin{table}[htbp]
+	\caption{Global MAPE per Motorway}
+	\begin{center}
+		\begin{tabular}{|c|c|}
+			\hline
+			\textbf{Motorway}&{\textbf{MAPE}} \\
+			\hline
+			M6& 3.18\%\\
+			\hline
+			M11& 3.00\%\\
+			\hline
+			M25& 5.52\%\\
+			\hline
+		\end{tabular}
+		\label{mapeglobal}
+	\end{center}
+\end{table}
 
 \section{Future Work}
 The algorithm supplied above meets all the requirements described in Section \ref{algorithm} except for the fact that it requires a heuristically set threshold. 
