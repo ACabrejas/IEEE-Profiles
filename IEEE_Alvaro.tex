@@ -70,9 +70,9 @@ NTIS data is used to assign a traffic profile to each link on the network.
 Each profile contains the expected travel time at any given time of day, understood as the average time to transverse said link with a resolution of one minute.
 Historical travel time data within the same link is used to compute expected future travel times.\\
 
-Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not made public. \\
+Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent segmentation (manual clustering), although the exact methodology is not made public. \\
 
-Here, using NTIS travel time data, we present a novel method for generating profiles for a complete week, such that they do not require segmentation, clustering or an underlying model, only requiring statistical and spectral analysis of previous data.
+Here, using NTIS travel time data, we present a novel method for generating profiles for a complete week, such that they do not require segmentation or an underlying model, only requiring statistical and spectral analysis of previous data.
 
 The available literature on travel times is extensive but most recent research in focuses on short-term forecasting. From a methodological point of view, different approaches can be found .
 *** HERE BE LIT REVIEW***
@@ -102,21 +102,21 @@ In these, the travel time can increase several times fold the usual values. Thes
 In this section, current approaches towards the generation of Traffic Profiles will be described, in line with how these are calculated in the United Kingdom.
 
 \subsection{Use of Exponentially Weighted Moving Average} \label{ewma}
-One currently used way for creating Traffic Profiles consists in applying an Exponentially Weighted Moving Average (EWMA) on the same minute of every day, with the implicit assumption that similar road behaviour can be expected at the same time of the day. 
-Whatever changes happen for a given time, will be smooth enough so their trend will be appropriately approximated by the EWMA.
-In these algorithms the Travel time forecast $F(i,d)$ on the $i-th$ minute of a given day $d$, with measured travel time $t$, will be:
+One currently used way for creating Traffic Profiles consists in applying an EWMA on the same minute of every day, with the implicit assumption that similar road behaviour can be expected at the same time of the day. 
+Changes happening in a given time of the day, will be smooth enough across dates so their trend can be appropriately approximated by the EWMA.
+In these algorithms the next Travel time forecast $\hat{x}(i,d+1)$ on the $i-th$ minute of a given day $d$, with measured travel time $x_i^d$, will be:
 \begin{equation}
-F^{d+1}_i = \alpha * t^{d}_{i} + (1-\alpha)*F^{d}_{i}
+\hat{x}^{d+1}_i = \alpha * x^{d}_{i} + (1-\alpha)*\hat{x}^{d}_{i}
 \end{equation}
-The main problem found when using an EWMA is the manner in which the memory decays. 
-Since more recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs in the form of a traffic jam, the following forecasts will be biased, partially replicating this event and over-estimating the travel times in that section of road until enough new measurements have been taken to dissipate this effect.
+The main problem when using an EWMA is the manner in which the memory decays. 
+More recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times in that section of road until enough new measurements have been taken to dissipate this effect.
 
 \subsection{Segmentation}\label{segmentation}
 In addition, to acknowledge the specific differences between some special dates in the year, and the difference between days of the week, this family of methods requires the use of heavy date based segmentation. 
-This segmentation means that the EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...).
-If this is combined with the shortcomings presented in \ref{ewma}, it is found that some long reaching effects are generated, which can propagate for weeks into the future predictions, but do not have any reflection on the observed travel times, as it can be observed in Figure \ref{fig:EWMA_spike}.
-Furthermore, in order to generate this segmentation in a valid manner, an experienced team is necessary, since the needs for segmentation can geographically vary, given that the EWMA approach tends to better approximate endemic congestion. 
-This dependence on experienced teams can lead to the creation of legacy systems which may not be well understood after a few years, decreasing their usability over time unless extra effort is put into transmitting this knowledge and continually training new staff.
+The EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...).
+If this is combined with the shortcomings presented in Section \ref{ewma}, some long reaching effects are generated, which can propagate for weeks into the future predictions, but do not have any reflection on the observed travel times, as it can be seen in Figure \ref{fig:EWMA_spike}.
+Furthermore, in order to generate a valid segmentation, an experienced team is necessary, since the needs of the process can geographically vary, given that the EWMA approach tends to better approximate endemic congestion. 
+This dependence can lead to the creation of legacy systems which may not be well understood after a few years, decreasing their usability over time unless extra effort is put into transmitting this knowledge and continually train new staff.
 \begin{figure}
 	\includegraphics[width=\linewidth]{EWMA.pdf}
 	\caption{Example of the current algorithm predicting increases in travel times for several weeks after a peak is seen in the measured travel times (25/04/2016)}
@@ -160,7 +160,7 @@ For each link on a specific date, the required input data consists of one entry 
 Given the cyclic nature of traffic, the aim was a prediction algorithm that could account for the periodic variations and endemic congestion while being resilient to fluctuations and rare events. This algorithm also should:
 \begin{itemize}
 	\item Be robust, mitigating the propagation of isolated events into future forecasts.
-	\item Not require the use of time segmentation or clustering and be valid for regular and "special dates".
+	\item Not require the use of time segmentation and be valid for regular and "special dates".
 	\item Be location agnostic, the internal parameters should be set algorithmically based on the data.
 	\item Have Gaussian, mean 0, uncorrelated residuals.
 	\item Near flat Trend term, given the different time scales between seasonal cycles and changes in the general motorway flow.
