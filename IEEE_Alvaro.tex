@@ -6,6 +6,7 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{stfloats}
 \usepackage{tabularx, booktabs} 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -60,19 +61,18 @@ Travel Time, Traffic Congestion, Prediction
 \section{Introduction}
 The UK is considered world-leading in its ability to collect and process real-time data from its road network. 
 Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
-Highways England collects data of the speed, flow, travel time and other data on the Strategic Road Network using sensors on the road and in vehicles. 
+Highways England collects speed, flow, travel time and other data on the Strategic Road Network using sensors on the road and in vehicles. 
 The basic building blocks of the Strategic Road Network are the so-called links. 
 They are segments of motorway, with a length varying between 500 and over 6000 meters. 
 The links on the network incorporate thousands of induction loops at different sites, which report their measurements to a centralised system.\\
 
 NTIS data is used to assign a traffic profile to each link on the network. 
 Each profile contains the expected travel time at any given time of day, understood as the average time to transverse said link with a resolution of one minute.
-These profiles use historical travel time data within the same link to provide expected future travel times.\\
+Historical travel time data within the same link is used to compute expected future travel times.\\
 
 Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent clustering, although the exact methodology is not made public. \\
 
-Here, using NTIS travel time data, a novel method for generating profiles investigated, such that they do not require segmentation, clustering or an underlying model, only requiring statistical and spectral analysis of previous data.
-
+Here, using NTIS travel time data, we present a novel method for generating profiles for a complete week, such that they do not require segmentation, clustering or an underlying model, only requiring statistical and spectral analysis of previous data.
 
 The available literature on travel times is extensive but most recent research in focuses on short-term forecasting. From a methodological point of view, different approaches can be found .
 *** HERE BE LIT REVIEW***
@@ -82,7 +82,7 @@ To test the transferability of this method, it is tested on three different moto
 
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
-The travel time for a given segment of road is the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
+The instantaneous travel time for a given segment of road is the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{./images/Traveltime_example2.jpg}}
@@ -90,14 +90,13 @@ The travel time for a given segment of road is the average time that the vehicle
 	\label{fig:travel_time_example}
 \end{figure}
 
-As it can be seen in Figure \ref{fig:travel_time_example} the travel time remains within a vaguely predictable pattern most of the days with bounded minima corresponding to the free flow time, although there are some outliers below this value corresponding to speeding drivers. 
-Very low highway travel times will be found during the nights, mostly being equal to the free flow time, these will meaningfully rise as people leave to work and the add load to the motorways. 
-This collective behaviour will create the morning traffic jams. 
-As the morning rush passes, the travel times settle to a plateau that lasts until late afternoon when the evening rush can be observed, which potentially, albeit less likely, can also create jams. 
+As it can be seen in Figure \ref{fig:travel_time_example} the travel time remains within a vaguely predictable pattern most of the days with bounded minima during nights corresponding with the free flow time, with some outliers below this value corresponding to speeding drivers. 
+Travel time will meaningfully rise as people leave to work and the add load to the motorways. 
+This collective behaviour will create the morning traffic jams, which in our data, are partially replicated during the evening rush hour, normally finding a plateau in between. 
 After this, the travel times slowly decay towards the night period of free-flow regime.\\
 
 However, as it also follows from Figure \ref{fig:travel_time_example}, it can be seen that there are a series of excursions out of this otherwise oscillating yet bounded typical travel time. 
-In these occasions the travel time can increase several times fold the usual values. These extreme oscillations are much less predictable both in intensity and inter-oscillation period than the recurrent congestion described previously.
+In these, the travel time can increase several times fold the usual values. These extreme oscillations are much less predictable both in intensity and inter-oscillation period than the recurrent congestion described previously.
  
 \section{Current Traffic Profiles}
 In this section, current approaches towards the generation of Traffic Profiles will be described, in line with how these are calculated in the United Kingdom.
@@ -134,14 +133,14 @@ The M25 was selected on the base that it is the most used Motorway in England on
 	\item The dataset for M6 comprises 90 days (12 complete weeks) of data (07/03/2016-05/06/2016) across 14 links.
 	\item The dataset for d M11 comprises 90 days (12 complete weeks) of data (07/03/2016-05/06/2016) across 25 links.
 	\item The dataset for M25 comprises 75 days (10 complete weeks) of data (07/04/2017-20/06/2017) across 61 links.
-	\item Links with more than 10\% of missing data were discarded.
+	\item Links were discarded if they had more than 10\% of missing data or if they contained any entry or exit ramps.
 	\item Whenever missing data was detected for 10 or less minutes, it was linearly interpolated.
 	\item Whenever missing data was detected for over 10 minutes, it was left as missing values.
 \end{itemize}
-For M6 and M11 the first 8 weeks are used to predict one week ahead.
-One week later, the process is repeated, deleting the oldest week of training data and incorporating measurements of the week predicted in the previous step. This is done 4 times.
+In the case of the M6 and the M11 the first 8 weeks are used to predict one complete week ahead.
+One week later, the process is repeated, deleting the oldest week of training data and incorporating measurements of the week predicted in the previous step. This is performed 4 times.
 In the case of the M25, the dataset comprised 10 complete weeks. 
-Hence, 6 weeks of data were used for training and the process as described above is done 3 times.
+Hence, 6 weeks of data were used for training and the process as described above is performed 3 times.
 \subsection{Data Contents}
 For each link on a specific date, the required input data consists of one entry per minute, containing:
 \begin{itemize}
@@ -155,13 +154,13 @@ For each link on a specific date, the required input data consists of one entry 
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{./images/finalplots/ACF_M6_Link3.pdf}}
 	\caption{Autocorrelation function of a link in the M6 over a period of 4 weeks, showing seasonal patterns on the daily and weekly periods.}
-	\label{fig:travel_time_example}
+	\label{fig:acf}
 \end{figure}
 
 Given the cyclic nature of traffic, the aim was a prediction algorithm that could account for the periodic variations and endemic congestion while being resilient to fluctuations and rare events. This algorithm also should:
 \begin{itemize}
-	\item Mitigate the propagation of isolated events into future forecasts.
-	\item Not require the use of time segmentation (experience) and be valid for regular and "special dates".
+	\item Be robust, mitigating the propagation of isolated events into future forecasts.
+	\item Not require the use of time segmentation or clustering and be valid for regular and "special dates".
 	\item Be location agnostic, the internal parameters should be set algorithmically based on the data.
 	\item Have Gaussian, mean 0, uncorrelated residuals.
 	\item Near flat Trend term, given the different time scales between seasonal cycles and changes in the general motorway flow.
@@ -266,12 +265,9 @@ Below, the sequence of steps taken to process the Background part of the measure
 
 \end{enumerate}
 \subsection{Seasonality Component}
-Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since "STL has several advantages over the classical decomposition method and X-12-ARIMA: Unlike X-12-ARIMA, STL will handle any type of seasonality, not only monthly and quarterly data. 
-The seasonal component is allowed to change over time, and the rate of change can be controlled by the user. 
-The smoothness of the trend-cycle can also be controlled by the user. It can be robust to outliers (i.e., the user can specify a robust decomposition). 
-So occasional unusual observations will not affect the estimates of the trend-cycle and seasonal components" \cite{forecasting}.\\
+Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since it will handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle, being robust to outliers \cite{forecasting}.\\
 
-Below, the sequence of steps taken to process the Seasonality Component part of the measured travel times is described. 
+Below, the sequence of steps taken to extract the Seasonality Components that can be seen in Fig. \ref{fig:acf} is described. 
 Note that this should be applied to the $n$ training weeks as a single time series.
 \begin{enumerate}
 	\item STL Decomposition of Background for daily seasonality
@@ -307,7 +303,7 @@ In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of t
 \end{equation}
 
 \section{Accuracy Results}
-\begin{table*}[htbp]
+\begin{table*}[bp]
 	\caption{MAPE Distribution Per Motorway}
 	\centering
 	\begin{center}
@@ -451,8 +447,8 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \section{Future Work}
-The algorithm supplied above meets all the requirements described in Section \ref{algorithm} except that it requires a heuristically set threshold. 
-One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet and Scale coefficients oscillate over time. 
+The algorithm presented above meets all the requirements described in Section \ref{algorithm} except that it requires a heuristically set threshold. 
+One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients oscillate over time within a scale level. 
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
 This work was part funded by the EPSRC under grant no. EP/L015374. 
