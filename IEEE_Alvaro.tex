@@ -241,8 +241,8 @@ For this purpose, an indicator function was defined, taking for every minute the
   \end{equation}
 
 \subsection{Spectral Component}
-The main difficulty when dealing with the Background time series is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. 
-In these situations signal smoothing can be easily performed by removing completely the frequency components from a certain frequency and up while the information bearing low frequency components are retained. For this task, the Fast Fourier Transform (FFT) \cite{FFT} was used.
+The main difficulty when dealing with the Background signal is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. 
+In these situations signal smoothing can be easily performed by completely removing a range of frequencies while the information bearing bands are retained. For this task, the Fast Fourier Transform (FFT) \cite{FFT} was used.
 
 Below, the sequence of steps taken to process the Background part of the measured travel times is described
 \begin{enumerate}
@@ -250,19 +250,19 @@ Below, the sequence of steps taken to process the Background part of the measure
 	\item Calculate Background Power Spectrum using FFT
 	\item Remove frequencies corresponding to periods under 4 hours and over 1 week
 	\item Repeat for all $n$ weeks in training set
-    \item Apply and EWMA to the weekly predictions
+    \item Apply EWMA to the modified weekly Power Spectra
 	\item Compute the Inverse Transform
 
 \end{enumerate}
 \subsection{Seasonality Component}
-Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since it will handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle, being robust to outliers \cite{forecasting}.\\
+Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle and being robust to outliers \cite{forecasting}.\\
 
-Below, the sequence of steps taken to extract the Seasonality Components that can be seen in Fig. \ref{fig:acf} is described. 
+Below, the sequence of steps taken to extract the Seasonality Components that can be observed in Fig. \ref{fig:acf} is described. 
 Note that this should be applied to the $n$ training weeks as a single time series.
 \begin{enumerate}
 	\item STL Decomposition of Background for daily seasonality
 	\item Extract and sum the series corresponding Trend and Remainder from Step 1
-	\item STL decomposition for weekly seasonality
+	\item Decompose output from 2 for weekly seasonality
 	\item Comprobation of Background's Remainder and Trend from Step 3
 	\begin{enumerate}
 		\item Background's Remainder should be zero mean, Gaussian distributed
@@ -283,10 +283,10 @@ Note that this should be applied to the $n$ training weeks as a single time seri
 		\item Spike's Trend should have a near zero slope
 	\end{enumerate}
 	\item Extract Spike's Seasonality corresponding to the number of weeks for forecasting
-	\item Add Spike's Seasonal component to the output of 8) to output from 9)
+	\item Add Spike's Seasonal component to the output of 8
 \end{enumerate}
 \subsection{Seasonal-Spectral Hybrid Profile}
-In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of the two forecasts generated in the previous points is taken, depending on what is the identified regime, as described in 
+In order to create the final Seasonal-Spectral Hybrid profile, referred to has Hybrid from here on, one of the two forecasts generated in the previous points is taken, depending on what is the identified regime, as described in 
 
 \begin{equation}
 \textrm{Hybrid} = \textrm{Seasonal} * \delta_{\textrm{spike}} + \textrm{Spectral} * (1 - \delta_{\textrm{spike}})
@@ -317,7 +317,7 @@ For each temporal point $i$, the Mean Average Percentage Error (MAPE) is defined
 \begin{equation}
 \textrm{MAPE} =\frac{ \left( \sum_{i=1}^{n} \frac{\|x_i - \hat{x_i}\|}{x_i}\right)}{n}
 \end{equation}
-In the case of the Motorways the Root Mean Squared Error (RMSE) has been calculated for each temporal point $i$ as:
+For complete Motorways, the Root Mean Squared Error (RMSE) has been calculated for each temporal point $i$ as:
 \begin{equation}
 \textrm{RMSE} = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \hat{x_i})^2}{n}}
 \end{equation}
@@ -345,7 +345,7 @@ The error for a Motorway is defined as the average of the error across all its l
 	\label{fig:m25q}
 \end{figure}
 Here, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across all percentiles of travel time.
-As it can be seen in Figures \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all percentiles of travel time except for the most extreme values where they all perform poorly.\\
+As it can be seen in Figs. \ref{fig:m6q}, \ref{fig:m11q} and \ref{fig:m25q}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all percentiles of travel time except for the most extreme values where they all perform poorly.\\
 The most meaningful difference occurs between percentiles $[50-95]$, where the Published Profile starts to suffer from higher inaccuracy.
 
 \subsection{Daytime Error}
@@ -370,11 +370,11 @@ The most meaningful difference occurs between percentiles $[50-95]$, where the P
 	\label{fig:m25daytime}
 \end{figure}
 
-In this subsection, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across the times of the day.
-As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile generated by combining the Seasonal and Spectral analysis has a higher accuracy than the Published Profiles and the NS Model for all times of the day, all locations and training lengths. 
+Here, the accuracy of the algorithm is compared against the Published Profiles and the NS Profile across the times of the day.
+As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all times of the day, all locations and training lengths. 
 The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles.\\
 In the case of the M6 and M11, where the training set is richer, the error at peak times is reduced by at least 50\% in all cases, reaching as much as 68.7\% in the case of the M6 morning rush.
-In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the methods used to calculate the Published Profile, this recurrent congestion is better captured by it, without the congestion being lighter in intensity than in the cases for the M6 and M11. 
+In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the use of EWMA, this recurrent congestion is better captured by it. 
 Even in this case, the proposed algorithm performs significantly better than any of the other two, except for a brief window between 6-7AM when it is outperformed by the NS Model.
 
 \begin{table}[htbp]
