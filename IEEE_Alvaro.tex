@@ -77,35 +77,6 @@ The available literature on travel times is extensive but most recent research i
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
 To test the transferability of this method, it is tested on three different motorways.
 
-\section{Data}
-
-
-
-\subsection{Data Selection}
-\begin{itemize}
-	\item Link-level data was extracted for sections of the M6, M11 and M25 motorways in England.
-	\item The dataset for M6 comprises 90 days of data (07/03/2016-05/06/2016) across 14 links.
-	\item The dataset for d M11 comprises 90 days of data (07/03/2016-05/06/2016) across 25 links.
-	\item The dataset for M25 comprises 75 days of data (07/04/2017-20/06/2017) across 61 links.
-	\item Links with more than 10\% of missing data were discarded.
-	\item Whenever missing data was detected for 10 or less minutes, it was linearly interpolated.
-	\item Whenever missing data was detected for over 10 minutes, it was left as missing values.
-\end{itemize}
-The first two motorways were selected due to their high usage and combination of recurrent and outstanding congestion. 
-The M25 was selected on the base that it is the most used Motorway in England on a daily basis, suffering from chronic congestion.
-\subsection{Data Contents}
-For each link on a specific date, the required data consists of one entry per minute, containing:
-\begin{itemize}
-	\item Measured travel time
-	\item Profile (expected) travel time 	
-\end{itemize}
-
-\subsection{Training and Testing Data}
-In the case of the M6 and M11, the data comprises 12 complete weeks of travel time. The previous 8 weeks are used to predict one week ahead.
-One week later, the process is repeated, deleting the oldest week of training data and incorporating measurements of the week predicted in the previous step. This is done 4 times.\\
-In the case of the M25, the dataset comprised 9 complete weeks. 
-Hence, 6 weeks of data were used for training and the process as described above is done 3 times.
-
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
 The travel time for a given segment of road is the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
@@ -149,6 +120,31 @@ This dependence on experienced teams can lead to the creation of legacy systems 
 	\caption{Example of the current algorithm predicting increases in travel times for several weeks after a peak is seen in the measured travel times (25/04/2016)}
 	\label{fig:EWMA_spike}
 \end{figure}
+
+
+\section{Data}
+\subsection{Data Gathering and Selection}
+Data was gathered from 3 different Motorways in England.
+The M6 and M11 were selected due to their high usage and combination of recurrent and outstanding congestion. 
+The M25 was selected on the base that it is the most used Motorway in England on a daily basis, suffering from chronic congestion.
+\begin{itemize}
+	\item The dataset for M6 comprises 90 days (12 complete weeks) of data (07/03/2016-05/06/2016) across 14 links.
+	\item The dataset for d M11 comprises 90 days (12 complete weeks) of data (07/03/2016-05/06/2016) across 25 links.
+	\item The dataset for M25 comprises 75 days (10 complete weeks) of data (07/04/2017-20/06/2017) across 61 links.
+	\item Links with more than 10\% of missing data were discarded.
+	\item Whenever missing data was detected for 10 or less minutes, it was linearly interpolated.
+	\item Whenever missing data was detected for over 10 minutes, it was left as missing values.
+\end{itemize}
+For M6 and M11 the first 8 weeks are used to predict one week ahead.
+One week later, the process is repeated, deleting the oldest week of training data and incorporating measurements of the week predicted in the previous step. This is done 4 times.
+In the case of the M25, the dataset comprised 10 complete weeks. 
+Hence, 6 weeks of data were used for training and the process as described above is done 3 times.
+\subsection{Data Contents}
+For each link on a specific date, the required input data consists of one entry per minute, containing:
+\begin{itemize}
+	\item Measured travel time
+	\item Profile (expected) travel time 	
+\end{itemize}
 
 
 \section{Travel Time Prediction Algorithm} \label{algorithm}
