@@ -6,6 +6,7 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{amsmath}
 \usepackage{stfloats}
 \usepackage{tabularx, booktabs} 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
@@ -97,10 +98,8 @@ After this, the travel times slowly decay towards the night period of free-flow 
 
 However, as it also follows from Figure \ref{fig:travel_time_example}, it can be seen that there are a series of excursions out of this otherwise oscillating yet bounded typical travel time. 
 In these, the travel time can increase several times fold the usual values. These extreme oscillations are much less predictable both in intensity and inter-oscillation period than the recurrent congestion described previously.
- 
 \section{Current Traffic Profiles}
 In this section, current approaches towards the generation of Traffic Profiles will be described, in line with how these are calculated in the United Kingdom.
-
 \subsection{Use of Exponentially Weighted Moving Average} \label{ewma}
 One currently used way for creating Traffic Profiles consists in applying an EWMA on the same minute of every day, with the implicit assumption that similar road behaviour can be expected at the same time of the day. 
 Changes happening in a given time of the day, will be smooth enough across dates so their trend can be appropriately approximated by the EWMA.
@@ -110,7 +109,6 @@ In these algorithms the next Travel time forecast $\hat{x}(i,d+1)$ on the $i-th$
 \end{equation}
 The main problem when using an EWMA is the manner in which the memory decays. 
 More recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times in that section of road until enough new measurements have been taken to dissipate this effect.
-
 \subsection{Segmentation}\label{segmentation}
 In addition, to acknowledge the specific differences between some special dates in the year, and the difference between days of the week, this family of methods requires the use of heavy date based segmentation. 
 The EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...).
@@ -122,8 +120,6 @@ This dependence can lead to the creation of legacy systems which may not be well
 	\caption{Example of the current algorithm predicting increases in travel times for several weeks after a peak is seen in the measured travel times (25/04/2016)}
 	\label{fig:EWMA_spike}
 \end{figure}
-
-
 \section{Data}
 \subsection{Data Gathering and Selection}
 Data was gathered from 3 different Motorways in England.
@@ -147,8 +143,6 @@ For each link on a specific date, the required input data consists of one entry 
 	\item Measured travel time
 	\item Profile (expected) travel time 	
 \end{itemize}
-
-
 \section{Travel Time Prediction Algorithm} \label{algorithm}
 
 \begin{figure}[htbp]
@@ -159,23 +153,23 @@ For each link on a specific date, the required input data consists of one entry 
 
 Given the cyclic nature of traffic, the aim was a prediction algorithm that could account for the periodic variations and endemic congestion while being resilient to fluctuations and rare events. This algorithm also should:
 \begin{itemize}
-	\item Be robust, mitigating the propagation of isolated events into future forecasts.
-	\item Not require the use of time segmentation and be valid for regular and "special dates".
+	\item Be robust, mitigating the propagation of isolated events into future forecasts, unlike methods using EWMA.
+	\item Not require the use of time segmentation and be valid for regular and "special" dates.
 	\item Be location agnostic, the internal parameters should be set algorithmically based on the data.
 	\item Have Gaussian, mean 0, uncorrelated residuals.
 	\item Near flat Trend term, given the different time scales between seasonal cycles and changes in the general motorway flow.
 \end{itemize}
 
 \subsection{Naive Segmentation}
-To obtain an accurate indication of the performance of the algorithm developed in the following subsections, an example of basic segmentation was coded. 
+To obtain an accurate comparison of the performance of the algorithm developed in the following subsections, an example of basic segmentation was coded. 
 This involved a weighted combination of the training data points using uniform weights. 
 In this way, for the $i-th$ minute of a week and using a training set composed of the previous of $n$ weeks, the Naive Segmentation (NS) profile is:
 \begin{equation}
-NS(i,n) = \sum_{\textrm{week}=1}^{n} \frac{x^i_n}{n} 
+\hat{x}(i,n) = \sum_{\textrm{week}=1}^{n} \frac{x^i_n}{n} 
 \end{equation}
 
 \subsection{Decomposition in Background and Spikes}
-During the exploratory data analysis it was found that, from the point of view of travel times, traffic operates in two clearly differentiated regimes. 
+During exploratory data analysis we found that, from the point of view of travel times, traffic operates in two differentiated regimes that we denominated Background and Spikes. 
 \begin{itemize}
 	\item Background: 
 	\begin{itemize}
@@ -186,7 +180,7 @@ During the exploratory data analysis it was found that, from the point of view o
 	\item Spikes: 
 	\begin{itemize}
 		\item Zero most of the time. Quickly go to extreme values.
-		\item Oscillates with great amplitude and low inter-oscillation frequency.
+		\item Oscillates with great amplitude and low inter-oscillation frequency, creating far reaching effects.
 		\item Suitable for seasonal decomposition.
 	\end{itemize}
 \end{itemize}
@@ -198,42 +192,20 @@ During the exploratory data analysis it was found that, from the point of view o
 	\label{fig:flowchart}
 \end{figure}
 
-In order to stop the large deviations from affecting the underlying true profile, it was decided to separate these spikes from the rest and treat them in a separate manner. 
-Assuming Gaussian noise $\xi$:
+This decomposition, assuming Gaussian noise $\xi$, signal of the form:
 \begin{equation}
-Travel \textrm{ } Time_t = Background_t + Spikes_t + \xi
+\textrm{Travel Time}_t  = \textrm{Background}_t + \textrm{Spikes}_t + \xi
 \end{equation}
-The objective was to separate them in such a way that most of the recurring congestion is captured as part of the Background and used for spectral analysis, attempting to mitigate the prediction error induced by the high frequency oscillations and obtaining a basic view of what can be daily observed.
-Meanwhile, the spikes, including the recurring component not captured in the background and the non-recurring congestion, were treated separately in an attempt to find seasonality in larger time scales than those in which the background oscillates. 
-Ideally, after this step, an operator should only find isolated large rare events deviating from the profile and white noise.\\
+The objective was to separate them in such a way that times of smooth operation are captured as part of the Background and used for spectral analysis, attempting to mitigate the prediction error induced by the high frequency oscillations and obtaining a basic view of what can be daily observed.
+Meanwhile, the spikes, including the recurring and non-recurring congestion, were treated separately searching for seasonality in larger time scales than those in which the background oscillates, as suggested by Fig. \ref{fig:acf}. 
+Ideally, after this step, the remainder should only contain isolated large rare events deviating from the profile and white noise.\\
 
-To prevent the differing lengths of the links from affecting this decomposition, for this step, all travel times were normalized according to their corresponding link's free flow time, understood as the time to transverse the length of the link at the maximum legal speed allowed by the motorway. 
-However, this step only mitigates the non-regularity of the time series, since there are drivers who do not follow these limits.\\
-
-A threshold was heuristically chosen to separate the two components in the different regimes from the normalised travel times. 
-Intuitively, this threshold scales with the amount of recurring congestion in a link. 
-Whenever a data point is above the threshold, it is flagged as belonging to a spike.
-
-\begin{figure}[htbp]
-	\centering
-	\includegraphics[width=\linewidth]{BS.pdf}
-	\caption{ Decomposition of time series in background and spikes }
-	\label{fig:Background}
-\end{figure}
-
-For this purpose, an indicator function was defined, taking for every minute the value:\\
-\begin{equation}
-\delta_t^{spike}= \left\{
-\begin{array}{lr}
-1 & : \textrm{Over threshold}\\
-0 & : \,\,\,\,\,\,\,\,\,\,\,\,\textrm{Otherwise}
-\end{array}
-\right.
-\label{eq:delta}
-\end{equation}
-
+To prevent the differing lengths of the links from affecting this decomposition, for this step, all travel times were normalized according to their corresponding link's free flow time, defined as the time to transverse the length of the link at the maximum legal speed allowed by the motorway. 
+However, this step only mitigates the non-regularity of the time series, since there are drivers who do not follow these limits.
+A threshold was heuristically set, as seen in Table \ref{table:threshold}  to separate the two components in the different regimes from the normalised travel times on a per-motorway basis, although better results can be obtained by setting each link individually. 
+Intuitively, this threshold scales with the amount of recurring congestion in a link. Whenever a data point was above the threshold, it was flagged as belonging to a spike.
 \begin{table}[htbp]
-	\caption{Normalised Travel Time Thresholds}
+	\caption{Travel Time Normalisation Thresholds}
 	\begin{center}
 		\begin{tabular}{|c|c|}
 			\hline
@@ -246,9 +218,27 @@ For this purpose, an indicator function was defined, taking for every minute the
 			M25& 1.4\\
 			\hline
 		\end{tabular}
-		\label{tab1}
+		\label{table:threshold}
 	\end{center}
 \end{table}
+
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\linewidth]{BS.pdf}
+	\caption{ Decomposition time series in background and spikes }
+	\label{fig:Background}
+\end{figure}
+
+For this purpose, an indicator function was defined, taking for every minute the value:
+\begin{equation}
+    \delta_t^{spike}=
+    \begin{cases}
+      1, & \text{if } x_t > \text{Threshold}\\
+      0, & \text{otherwise}
+    \end{cases}
+    \label{delta}
+  \end{equation}
 
 \subsection{Spectral Component}
 The main difficulty when dealing with the Background time series is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. 
