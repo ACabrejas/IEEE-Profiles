@@ -6,9 +6,12 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
+\usepackage{tabularx, booktabs} 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \graphicspath{{./images/}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{1.8cm}}
+
 \begin{document}
 
 \title{Estimating Baseline Travel Times for the UK Strategic Road Network
@@ -82,7 +85,7 @@ The most direct variable for measuring the state of traffic over a length of roa
 The travel time for a given segment of road is the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
 
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=\linewidth]{./images/Traveltime_example.png}}
+	\centerline{\includegraphics[width=\linewidth]{./images/Traveltime_example2.jpg}}
 	\caption{Travel times on link 117007401 in the M6 over three weeks.}
 	\label{fig:travel_time_example}
 \end{figure}
@@ -304,6 +307,25 @@ In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of t
 \end{equation}
 
 \section{Accuracy Results}
+\begin{table*}[htbp]
+	\caption{MAPE Distribution Per Motorway}
+	\centering
+	\begin{center}
+		\begin{tabular}{|C|C|C|C|C|C|C|C|C|}
+			\hline
+			\textbf{\% rel. error}&{\textless -25\%}&{-25\%\textbf{ to }-15\%}&{-15\%\textbf{ to }-5\%}&{-5\%\textbf{ to }5\%}&{5\%\textbf{ to }15\%}&{15 \%\textbf{ to }25\%}&{\textgreater 25\%}\\
+			\hline
+			M6& 1.58& 0.60& 3.77& 88.01& 5.97& 0.06& 0.01\\
+			\hline
+			M11& 0.80& 0.35& 4.07& 86.15& 7.97& 0.49& 0.15\\
+			\hline
+			M25& 3.85& 2.73& 10.42& 75.12& 7.29& 0.33& 0.28\\
+			\hline
+		\end{tabular}
+		\label{mapeglobal}
+	\end{center}
+\end{table*}
+  
 In this section the accuracy of the algorithm described above is compared against the Published Profiles and the NS Model. 
 For each temporal point $i$, the Mean Average Percentage Error (MAPE) is defined below:
 \begin{equation}
@@ -417,11 +439,11 @@ Even in this case, the proposed algorithm performs significantly better than any
 			\hline
 			\textbf{Motorway}&{\textbf{MAPE [\%]}}&{\textbf{RMSE [s]}} \\
 			\hline
-			M6& 3.18\%& 3.68\\
+			M6& 3.18\%& 0.0368\\
 			\hline
-			M11& 3.00\%& 3.55\\
+			M11& 3.00\%& 0.0355\\
 			\hline
-			M25& 5.52\%& 6.67\\
+			M25& 5.52\%& 0.0667\\
 			\hline
 		\end{tabular}
 		\label{mapeglobal}
