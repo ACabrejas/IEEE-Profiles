@@ -8,11 +8,15 @@
 \usepackage{textcomp}
 \usepackage{amsmath}
 \usepackage{stfloats}
+\usepackage[]{algorithm2e}
 \usepackage{tabularx, booktabs} 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \graphicspath{{./images/}}
 \newcolumntype{C}{>{\centering\arraybackslash}p{1.8cm}}
+\usepackage{hyperref}
+\hypersetup{pdftex,colorlinks=true,allcolors=blue}
+\usepackage{hypcap}
 
 \begin{document}
 
@@ -28,6 +32,7 @@ a.cabrejas-egea@warwick.ac.uk}
 \and
 \IEEEauthorblockN{Peter De Ford}
 \IEEEauthorblockA{\textit{McKinsey \& Company} \\
+\textit{\& Geospatial Department} \\
 	San Jose, Costa Rica \\
 	pdeford@outlook.com}
 \and
@@ -45,14 +50,14 @@ c.p.connaughton@warwick.ac.uk}
 We present a new method for long-term estimation of the expected travel time for links on highways and their variation with time.  
 The approach is based on a time series analysis of travel time data from the UK's National Traffic Information Service (NTIS).  
 Time series of travel times are characterised by a noisy background variation exhibiting the expected daily and weekly patterns punctuated by large spikes associated with congestion events. 
-Some of these spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. 
-Our algorithm uses thresholding to split the time series into background and spike signals, each of which is analysed separately. 
+Some spikes are caused by peak hour congestion and some are caused by unforeseen events like accidents. 
+Our algorithm uses thresholding to split the data into background and spike signals, each of which is analysed separately. 
 The the background signal is extracted using spectral filtering. 
 The periodic part of the spike signal is extracted using locally weighted regression (LWR). 
 The final estimated travel time is obtained by recombining these two. 
 We assess our method by cross-validating in several UK motorways. 
-We use 8 weeks of training data and calculate the mean absolute percentage error (MAPE) of the resulting travel time estimates for week of test data, repeating this process 4 times. 
-We find that the MAPE is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
+We use 8 weeks of training data and calculate the error of the resulting travel time estimates for a week of test data, repeating this process 4 times. 
+We find that the error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -64,25 +69,23 @@ The UK is considered world-leading in its ability to collect and process real-ti
 Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
 Highways England collects speed, flow, travel time and other data on the Strategic Road Network using sensors on the road and in vehicles. 
 The basic building blocks of the Strategic Road Network are the so-called links. 
-They are segments of motorway, with a length varying between 500 and over 6000 meters. 
-The links on the network incorporate thousands of induction loops at different sites, which report their measurements to a centralised system.\\
-
+They are segments of motorway, with a length varying between 500 and over 20000 metres.  
+The links on the network incorporate thousands of induction loops at different sites, which report their measurements to a centralised system.
 NTIS data is used to assign a traffic profile to each link on the network. 
-Each profile contains the expected travel time at any given time of day, understood as the average time to transverse said link with a resolution of one minute.
-Historical travel time data within the same link is used to compute expected future travel times.\\
+Each profile contains, with a resolution of one minute, the expected travel time at any given time of day, understood as the average time to transverse said link.
+Historical travel time data within the same link is used to compute expected future travel times.
 
-Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent segmentation (manual clustering), although the exact methodology is not made public. \\
+Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent segmentation (manual clustering), although the exact methodology is not made public.
 
 Here, using NTIS travel time data, we present a novel method for generating profiles for a complete week, such that they do not require segmentation or an underlying model, only requiring statistical and spectral analysis of previous data.
 
 The available literature on travel times is extensive but most recent research in focuses on short-term forecasting and not on the long term \cite{long-term} \cite{long-term-2}. From a methodological point of view Machine Learning and Statistical Methods take most of the attention \cite{should}, different approaches can be found: using historical data \cite{simple} \cite{dynamic-historic}, neural networks \cite{NN}.
 Others take closer approaches to this paper differentiating between peak and non-peak \cite{peak-historic}, using spectral analysis \cite{spectral1} \cite{spectral2} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
-Comparisons between some of these studies and others can be found in \cite{nikovski} \cite{lint} \cite{mori} \cite{ser}
+Comparisons between some of these studies and others can be found in \cite{nikovski}, \cite{lint}, \cite{mori} and \cite{ser}.
 
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
+To assess the transferability of this method, it is tested on three different motorways.
 The method here presented, uses a combination of spectral analysis, tree decisions and local regression.
-To test the transferability of this method, it is tested on three different motorways.
-
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
 The instantaneous travel time for a given segment of road is the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
@@ -93,24 +96,24 @@ The instantaneous travel time for a given segment of road is the average time th
 	\label{fig:travel_time_example}
 \end{figure}
 
-As it can be seen in Figure \ref{fig:travel_time_example} the travel time remains within a vaguely predictable pattern most of the days with bounded minima during nights corresponding with the free flow time, with some outliers below this value corresponding to speeding drivers. 
-Travel time will meaningfully rise as people leave to work and the add load to the motorways. 
+As it can be seen in Figure \ref{fig:travel_time_example} the travel time remains within a vaguely predictable pattern most of the days, with bounded minima during nights corresponding with the free flow time and with some outliers below this value corresponding to speeding drivers. 
+Travel time will meaningfully rise as people leave to work and add load to the motorways. 
 This collective behaviour will create the morning traffic jams, which in our data, are partially replicated during the evening rush hour, normally finding a plateau in between. 
-After this, the travel times slowly decay towards the night period of free-flow regime.\\
-
-However, as it also follows from Figure \ref{fig:travel_time_example}, it can be seen that there are a series of excursions out of this otherwise oscillating yet bounded typical travel time. 
-In these, the travel time can increase several times fold the usual values. These extreme oscillations are much less predictable both in intensity and inter-oscillation period than the recurrent congestion described previously.
+After this, the travel times slowly decay towards the night period of free-flow regime.
+In Figure \ref{fig:travel_time_example}, it can also be seen that there are a series of excursions out of this oscillating yet bounded typical behaviour. 
+In these, the travel time can increase several times fold the usual values.
+These extreme oscillations are much less predictable both in intensity and inter-oscillation period than the recurrent congestion described previously.
 \section{Current Traffic Profiles}
 In this section, current approaches towards the generation of Traffic Profiles will be described, in line with how these are calculated in the United Kingdom.
 \subsection{Use of Exponentially Weighted Moving Average} \label{ewma}
 One currently used way for creating Traffic Profiles consists in applying an EWMA on the same minute of every day, with the implicit assumption that similar road behaviour can be expected at the same time of the day. 
 Changes happening in a given time of the day, will be smooth enough across dates so their trend can be appropriately approximated by the EWMA.
-In these algorithms the next Travel time forecast $\hat{x}(i,d+1)$ on the $i-th$ minute of a given day $d$, with measured travel time $x_i^d$, will be:
+In these algorithms the next Travel time forecast $\hat{x}(i,d+1)$ on the $i-th$ minute of a given day $d$, for a memory parameter $\alpha \in [0,1]$ and with measured travel time $x_i^d$, will be:
 \begin{equation}
 \hat{x}^{d+1}_i = \alpha * x^{d}_{i} + (1-\alpha)*\hat{x}^{d}_{i}
 \end{equation}
 The main problem when using an EWMA is the manner in which the memory decays. 
-More recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times in that section of road until enough new measurements have been taken to dissipate this effect.
+Recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times until enough new measurements have been taken to dissipate this effect.
 \subsection{Segmentation}\label{segmentation}
 In addition, to acknowledge the specific differences between some special dates in the year, and the difference between days of the week, this family of methods requires the use of heavy date based segmentation. 
 The EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...).
@@ -137,8 +140,7 @@ The M25 was selected on the base that it is the most used Motorway in England on
 \end{itemize}
 In the case of the M6 and the M11 the first 8 weeks are used to predict one complete week ahead.
 One week later, the process is repeated, deleting the oldest week of training data and incorporating measurements of the week predicted in the previous step. This is performed 4 times.
-In the case of the M25, the dataset comprised 10 complete weeks. 
-Hence, 6 weeks of data were used for training and the process as described above is performed 3 times.
+In the case of the M25, 6 weeks of data were used for training and the process as described above is performed 3 times.
 \subsection{Data Contents}
 For each link on a specific date, the required input data consists of one entry per minute, containing:
 \begin{itemize}
@@ -244,9 +246,8 @@ For this purpose, an indicator function was defined, taking for every minute the
 
 \subsection{Spectral Component}
 The main difficulty when dealing with the Background signal is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. 
-In these situations signal smoothing can be easily performed by completely removing a range of frequencies while the information bearing bands are retained. For this task, the Fast Fourier Transform (FFT) \cite{FFT} was used.
+Signal smoothing can be performed by completely removing a range of frequencies while the information bearing bands are retained. For this task, the Fast Fourier Transform (FFT) \cite{FFT} was used as follows:
 
-Below, the sequence of steps taken to process the Background part of the measured travel times is described
 \begin{enumerate}
 
 	\item Calculate Background Power Spectrum using FFT
@@ -257,9 +258,9 @@ Below, the sequence of steps taken to process the Background part of the measure
 
 \end{enumerate}
 \subsection{Seasonality Component}
-Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle and being robust to outliers \cite{forecasting}.\\
+Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle while being robust to outliers \cite{forecasting}.\\
 
-Below, the sequence of steps taken to extract the Seasonality Components that can be observed in Fig. \ref{fig:acf} is described. 
+Below, the sequence of steps taken to extract the Seasonality Components that can be observed in Fig. \ref{fig:acf} is described in line with Fig. \ref{fig:flowchart}. 
 Note that this should be applied to the $n$ training weeks as a single time series.
 \begin{enumerate}
 	\item STL Decomposition of Background for daily seasonality
@@ -288,7 +289,7 @@ Note that this should be applied to the $n$ training weeks as a single time seri
 	\item Add Spike's Seasonal component to the output of 8
 \end{enumerate}
 \subsection{Seasonal-Spectral Hybrid Profile}
-In order to create the final Seasonal-Spectral Hybrid profile, referred to has Hybrid from here on, one of the two forecasts generated in the previous points is taken, depending on what is the identified regime, as described in 
+In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of the two forecasts generated in the previous points is taken, depending on what is the identified regime: 
 
 \begin{equation}
 \textrm{Hybrid} = \textrm{Seasonal} * \delta_{\textrm{spike}} + \textrm{Spectral} * (1 - \delta_{\textrm{spike}})
@@ -439,8 +440,8 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \section{Future Work}
-The algorithm presented above meets all the requirements described in Section \ref{algorithm} except that it requires a heuristically set threshold. 
-One potential way of reaching total compliance with these requirements is to perform the decomposition between Background and Spikes by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients oscillate over time within a scale level. 
+The algorithm presented above meets the requirements described in Section \ref{algorithm} except for an heuristically set threshold. 
+One potential way of reaching compliance with these requirements is to perform the decomposition by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients oscillate over time within a scale level. 
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
 This work was part funded by the EPSRC under grant no. EP/L015374. 
@@ -460,10 +461,11 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 \bibitem{should} Kirby, H. R., Watson, S. M., Dougherty, M. S. (1997). Should we use neural networks or statistical models for short-term motorway traffic forecasting?. International Journal of Forecasting, 13(1), 43-50.
 \bibitem{simple} Rice, J., Van Zwet, E. (2004). A simple and effective method for predicting travel times on freeways. IEEE Transactions on Intelligent Transportation Systems, 5(3), 200-207.
 \bibitem{dynamic-historic} Chien, S. I. J., Kuchipudi, C. M. (2003). Dynamic travel time prediction with real-time and historic data. Journal of transportation engineering, 129(6), 608-616.
+\bibitem{NN} Lee, Y. (2009, July). Freeway travel time forecast using artifical neural networks with cluster method. In Information Fusion, 2009. FUSION'09. 12th International Conference on (pp. 1331-1338). IEEE.
 \bibitem{peak-historic} Zhang, Y., Liu, Y. (2011). Analysis of peak and non‐peak traffic forecasts using combined models. Journal of Advanced Transportation, 45(1), 21-37.
 \bibitem{spectral1} Nicholson, H., Swann, C. D. (1974). The prediction of traffic flow volumes based on spectral analysis. Transportation Research, 8(6), 533-538.
 \bibitem{spectral2} Park, D., Rilett, L. R., Han, G. (1999). Spectral basis neural networks for real-time travel time forecasting. Journal of Transportation Engineering, 125(6), 515-523.
-\bibitem{NN} Lee, Y. (2009, July). Freeway travel time forecast using artifical neural networks with cluster method. In Information Fusion, 2009. FUSION'09. 12th International Conference on (pp. 1331-1338). IEEE.
+
 \bibitem{williams} Williams, B., Durvasula, P., Brown, D. (1998). Urban freeway traffic flow prediction: application of seasonal autoregressive integrated moving average and exponential smoothing models. Transportation Research Record: Journal of the Transportation Research Board, (1644), 132-141.
 \bibitem{sun} Sun, H., Liu, H. X., Xiao, H., He, R. R., Ran, B. (2003, January). Short term traffic forecasting using the local linear regression model. In 82nd Annual Meeting of the Transportation Research Board, Washington, DC.
 \bibitem{zhong} Zhong, M., Sharma, S., Lingras, P. (2005). Refining genetically designed models for improved traffic prediction on rural roads. Transportation planning and technology, 28(3), 213-236.
