@@ -247,7 +247,6 @@ For this purpose, an indicator function was defined, taking for every minute the
 \subsection{Spectral Component}
 The main difficulty when dealing with the Background signal is the low amplitude, high frequency fluctuations that can be found almost ubiquitously. 
 Signal smoothing can be performed by completely removing a range of frequencies while the information bearing bands are retained. For this task, the Fast Fourier Transform (FFT) \cite{FFT} was used as follows:
-
 \begin{enumerate}
 
 	\item Calculate Background Power Spectrum using FFT
@@ -265,29 +264,16 @@ Note that this should be applied to the $n$ training weeks as a single time seri
 \begin{enumerate}
 	\item STL Decomposition of Background for daily seasonality
 	\item Extract and sum the series corresponding Trend and Remainder from Step 1
-	\item Decompose output from 2 for weekly seasonality
-	\item Comprobation of Background's Remainder and Trend from Step 3
-	\begin{enumerate}
-		\item Background's Remainder should be zero mean, Gaussian distributed
-		\item Background's Trend should have a near zero slope
-	\end{enumerate}
+	\item STL Decomposition of output from 2 for weekly seasonality
 	\item Add daily and weekly Seasonal components from Step 1 and Step 3 to obtain global seasonality
 	\item Average seasonality across training weeks
-	\item Linearise Trend term from
-	\begin{enumerate}
-		\item Select extreme values in the series and create a linear interpolation between them
-		\item Extract the trend corresponding to the number of weeks for forecasting
-	\end{enumerate}
+	\item Linearise Trend term from output of Step 3
 	\item Add linearised trend to seasonality obtained in Step 6
 	\item STL Decomposition of Spikes for weekly seasonality
-	\item Comprobation of Spike's remainder and trend
-	\begin{enumerate}
-		\item Spike's Remainder should be zero mean, Gaussian distributed
-		\item Spike's Trend should have a near zero slope
-	\end{enumerate}
 	\item Extract Spike's Seasonality corresponding to the number of weeks for forecasting
 	\item Add Spike's Seasonal component to the output of 8
 \end{enumerate}
+To ensure a successful decomposition, after Step 3  Background's Remainder should be zero mean, Gaussian distributed. Background's Trend should have a near zero slope. This should also hold after Step 8.
 \subsection{Seasonal-Spectral Hybrid Profile}
 In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of the two forecasts generated in the previous points is taken, depending on what is the identified regime: 
 
