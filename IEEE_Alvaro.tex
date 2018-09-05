@@ -302,7 +302,7 @@ In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of t
 \end{table*}
   
 In this section the accuracy of the algorithm described above is compared against the Published Profiles and the NS Model. 
-For each temporal point $i$, the Mean Average Percentage Error (MAPE) is defined below:
+For each temporal point $i$, the Mean Average Relative Error (MARE) is defined below:
 \begin{equation}
 \textrm{MARE} =\frac{ \left( \sum_{i=1}^{n} \frac{\|x_i - \hat{x_i}\|}{x_i}\right)}{n}
 \end{equation}
@@ -311,7 +311,7 @@ For complete Motorways, the Root Mean Squared Error (RMSE) has been calculated f
 \textrm{RMSE} = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \hat{x_i})^2}{n}}
 \end{equation}
 
-In both cases the error for a Link is defined as the average MAPE or RMSE across all prediction points.
+In both cases the error for a Link is defined as the average MARE or RMSE across all prediction points.
 The error for a Motorway is defined as the average of the error across all its links.
 \subsection{Accuracy by Quantile}
 \begin{figure}[htbp]
@@ -412,7 +412,7 @@ Even in this case, the proposed algorithm performs significantly better than any
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
-			\textbf{Motorway}&{\textbf{MAPE [\%]}}&{\textbf{RMSE [s]}} \\
+			\textbf{Motorway}&{\textbf{MARE}}&{\textbf{RMSE [s]}} \\
 			\hline
 			M6& 0.0318& 0.0368\\
 			\hline
