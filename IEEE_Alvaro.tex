@@ -65,26 +65,26 @@ Travel Time, Traffic Congestion, Prediction
 \end{IEEEkeywords}
 
 \section{Introduction}
-The UK is considered world-leading in its ability to collect and process real-time data from its road network. 
-Highways England are responsible for making this data available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
-Highways England collects speed, flow, travel time and other data on the Strategic Road Network using sensors on the road and in vehicles. 
-The basic building blocks of the Strategic Road Network are the so-called links. 
-They are segments of motorway, with a length varying between 500 and over 20000 metres.  
-The links on the network incorporate thousands of induction loops at different sites, which report their measurements to a centralised system.
-NTIS data is used to assign a traffic profile to each link on the network. 
-Each profile contains, with a resolution of one minute, the expected travel time at any given time of day, understood as the average time to transverse said link.
-Historical travel time data within the same link is used to compute expected future travel times.
+The UK collects and processes data from its Strategic Road Network (SRN) in real time and makes it available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
+NTIS collects speed, flow and travel time data using sensors on the road and in vehicles. 
+The basic building blocks of the SRN are called links -  segments of motorway between 500 and 20000 metres in length.  
+NTIS data is used to assign a travel time profile to each link. 
+Profiles should represent the typical time to traverse a link at a given time of day on a given day of the week and are the topic of study of this paper.
+ 
+Profiles clearly vary with day of the week and time of the day but should be relatively stable from one week to the next.
+This stability over time means calculating profiles is different from the problem of short-term forecasting.
+While there is no a-priori mathematical definition of a typical travel time,  we take it to mean the value that minimises the mean absolute percentage error (MAPE) with respect to subsequently measured travel times.
+NTIS publishes profile values alongside measured travel times although the methodology used to calculate them is not in the public domain. 
+In this paper, we present a novel method for generating profiles for a complete week. 
+Our approach is based on statistical analysis of previous data and does not require any a-priori segmentation of days into classes. 
+Rather patterns of intra- and inter-day variability are learned directly from the data.
 
-Currently, generating these profiles makes use of a combination of an Exponentially Weighted Moving Average (EWMA) and heavy time-dependent segmentation (manual clustering), although the exact methodology is not made public.
-
-Here, using NTIS travel time data, we present a novel method for generating profiles for a complete week, such that they do not require segmentation or an underlying model, only requiring statistical and spectral analysis of previous data.
-
-The available literature on travel times is extensive but most recent research in focuses on short-term forecasting and not on the long term \cite{long-term} \cite{long-term-2}. From a methodological point of view Machine Learning and Statistical Methods take most of the attention \cite{should}, different approaches can be found: using historical data \cite{simple} \cite{dynamic-historic}, neural networks \cite{NN}.
+The available literature on travel times is extensive but most recent research focuses on short-term forecasting and not on the long term \cite{long-term} \cite{long-term-2}. 
+From a methodological point of view machine learning and statistical methods take most of the attention \cite{should}, different approaches can be found: using historical data \cite{simple} \cite{dynamic-historic}, neural networks \cite{NN}.
 Others take closer approaches to this paper differentiating between peak and non-peak \cite{peak-historic}, using spectral analysis \cite{spectral1} \cite{spectral2} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
-Comparisons between some of these studies and others can be found in \cite{nikovski}, \cite{lint}, \cite{mori} and \cite{ser}.
-
+Comparisons between some of these studies and others can be found in \cite{nikovski}, \cite{lint}, \cite{mori} and \cite{ser}. 
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
-To assess the transferability of this method, it is tested on three different motorways.
+To assess the transferability of our method, it is tested on three different motorways.
 The method here presented, uses a combination of spectral analysis, tree decisions and local regression.
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
@@ -103,26 +103,25 @@ After this, the travel times slowly decay towards the night period of free-flow 
 In Figure \ref{fig:travel_time_example}, it can also be seen that there are a series of excursions out of this oscillating yet bounded typical behaviour. 
 In these, the travel time can increase several times fold the usual values.
 These extreme oscillations are much less predictable both in intensity and inter-oscillation period than the recurrent congestion described previously.
-\section{Current Traffic Profiles}
-In this section, current approaches towards the generation of Traffic Profiles will be described, in line with how these are calculated in the United Kingdom.
-\subsection{Use of Exponentially Weighted Moving Average} \label{ewma}
-One currently used way for creating Traffic Profiles consists in applying an EWMA on the same minute of every day, with the implicit assumption that similar road behaviour can be expected at the same time of the day. 
-Changes happening in a given time of the day, will be smooth enough across dates so their trend can be appropriately approximated by the EWMA.
-In these algorithms the next Travel time forecast $\hat{x}(i,d+1)$ on the $i-th$ minute of a given day $d$, for a memory parameter $\alpha \in [0,1]$ and with measured travel time $x_i^d$, will be:
+
+\section{Basic methods for profile estimation}
+\subsection{Use of Exponentially Weighted Moving Average (EWMA)} \label{ewma}
+The most basic approach to profile estimation is to apply an EWMA on the same minute of every day, with the implicit assumption that similar behaviour is expected at the same time of the day. 
+In this approach, the estimated profile $\hat{x}(i,d+1)$ on the $i-th$ minute of a given day $d$, for a memory parameter $\alpha \in [0,1]$ and with measured travel time $x_i^d$, will be:
 \begin{equation}
 \hat{x}^{d+1}_i = \alpha * x^{d}_{i} + (1-\alpha)*\hat{x}^{d}_{i}
 \end{equation}
-The main problem when using an EWMA is the manner in which the memory decays. 
-Recent measurements are weighted more heavily than events in the past, if an extreme fluctuation occurs, the following forecasts will be biased, partially replicating this event and over-estimating the travel times until enough new measurements have been taken to dissipate this effect.
+The main problem with EWMA is the manner in which the memory decays. 
+Recent measurements are weighted more heavily than events in the past. Thus if an extreme fluctuation occurs,  the following profile estimates will be biased, partially replicating this event and over-estimating the travel times until enough new measurements arrive to dissipate this effect.
 \subsection{Segmentation}\label{segmentation}
 In addition, to acknowledge the specific differences between some special dates in the year, and the difference between days of the week, this family of methods requires the use of heavy date based segmentation. 
 The EWMA will be applied across dates which fall in the same category (i.e. Mondays, weekends, Christmas Day, ...).
-If this is combined with the shortcomings presented in Section \ref{ewma}, some long reaching effects are generated, which can propagate for weeks into the future predictions, but do not have any reflection on the observed travel times, as it can be seen in Figure \ref{fig:EWMA_spike}.
+If this is combined with the shortcomings presented in Section \ref{ewma}, some long reaching effects are generated, which can propagate for weeks into the future predictions, but do not have any reflection on the observed travel times. A possible instance of this effect can be seen in Figure \ref{fig:EWMA_spike}.
 Furthermore, in order to generate a valid segmentation, an experienced team is necessary, since the needs of the process can geographically vary, given that the EWMA approach tends to better approximate endemic congestion. 
 This dependence can lead to the creation of legacy systems which may not be well understood after a few years, decreasing their usability over time unless extra effort is put into transmitting this knowledge and continually train new staff.
 \begin{figure}
 	\includegraphics[width=\linewidth]{EWMA.pdf}
-	\caption{Example of the current algorithm predicting increases in travel times for several weeks after a peak is seen in the measured travel times (25/04/2016)}
+	\caption{A single large random spike in travel time can lead to over-estimation of subsequent profile estimates.}
 	\label{fig:EWMA_spike}
 \end{figure}
 \section{Data}
