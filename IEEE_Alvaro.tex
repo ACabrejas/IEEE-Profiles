@@ -283,7 +283,7 @@ In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of t
 
 \section{Accuracy Results}
 \begin{table*}[bp]
-	\caption{MAPE Distribution Per Motorway}
+	\caption{MARE Distribution Per Motorway}
 	\centering
 	\begin{center}
 		\begin{tabular}{|C|C|C|C|C|C|C|C|C|}
@@ -304,7 +304,7 @@ In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of t
 In this section the accuracy of the algorithm described above is compared against the Published Profiles and the NS Model. 
 For each temporal point $i$, the Mean Average Percentage Error (MAPE) is defined below:
 \begin{equation}
-\textrm{MAPE} =\frac{ \left( \sum_{i=1}^{n} \frac{\|x_i - \hat{x_i}\|}{x_i}\right)}{n}
+\textrm{MARE} =\frac{ \left( \sum_{i=1}^{n} \frac{\|x_i - \hat{x_i}\|}{x_i}\right)}{n}
 \end{equation}
 For complete Motorways, the Root Mean Squared Error (RMSE) has been calculated for each temporal point $i$ as:
 \begin{equation}
@@ -315,21 +315,21 @@ In both cases the error for a Link is defined as the average MAPE or RMSE across
 The error for a Motorway is defined as the average of the error across all its links.
 \subsection{Accuracy by Quantile}
 \begin{figure}[htbp]
-	\centerline{\includegraphics[width=\linewidth]{/finalplots/m6_q.pdf}}
+	\centerline{\includegraphics[width=\linewidth]{/finalplots/m6_q2.pdf}}
 	\caption{Average accuracy results in M6 across percentiles of travel time.}
 	\label{fig:m6q}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=\linewidth]{/finalplots/m11_q.pdf}
+	\includegraphics[width=\linewidth]{/finalplots/m11_q2.pdf}
 	\caption{Link average accuracy results in M11 across percentiles of travel time.}
 	\label{fig:m11q}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=\linewidth]{/finalplots/m25_q.pdf}
+	\includegraphics[width=\linewidth]{/finalplots/m25_q2.pdf}
 	\caption{Link average accuracy results in M25 across percentiles of travel time.}
 	\label{fig:m25q}
 \end{figure}
@@ -340,21 +340,21 @@ The most meaningful difference occurs between percentiles $[50-95]$, where the P
 \subsection{Daytime Error}
 \begin{figure}[htbp]
 	\centering
-		\includegraphics[width=\linewidth]{/finalplots/m6_dt.pdf}
+		\includegraphics[width=\linewidth]{/finalplots/m6_dt2.pdf}
 	\caption{Link average accuracy results in M6 across times of the day.}
 	\label{fig:m6daytime}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.95\linewidth]{/finalplots/m11_dt.pdf}
+	\includegraphics[width=0.95\linewidth]{/finalplots/m11_dt2.pdf}
 	\caption{Link average accuracy results in M6 across times of the day.}
 	\label{fig:m11daytime}
 \end{figure}
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=\linewidth]{/finalplots/m25_dt.pdf}
+	\includegraphics[width=\linewidth]{/finalplots/m25_dt2.pdf}
 	\caption{Link average accuracy results in M25 across times of the day.}
 	\label{fig:m25daytime}
 \end{figure}
@@ -367,39 +367,39 @@ In the case of the M25, which is congested on a regular basis, the errors in the
 Even in this case, the proposed algorithm performs significantly better than any of the other two, except for a brief window between 6-7AM when it is outperformed by the NS Model.
 
 \begin{table}[htbp]
-	\caption{MAPE per Link on M6}
+	\caption{MARE per Link on M6}
 	\begin{center}
 		\begin{tabular}{|c|c|}
 			\hline
-			\textbf{Link}&{\textbf{MAPE}} \\
+			\textbf{Link}&{\textbf{MARE}} \\
 			\hline
-			117007401& 2.11\%\\
+			117007401& 0.0211\\
 			\hline
-			117007501& 4.21\%\\
+			117007501& 0.0421\\
 			\hline
-			117007601& 2.46\%\\
+			117007601& 0.0246\\
 			\hline
-			117007801& 4.80\%\\
+			117007801& 0.0480\\
 			\hline
-			117007901& 3.08\%\\
+			117007901& 0.0308\\
 			\hline
-			117008401& 3.31\%\\
+			117008401& 0.0331\\
 			\hline
-			117009102& 2.69\%\\
+			117009102& 0.0269\\
 			\hline
-			117011901& 2.35\%\\
+			117011901& 0.0235\\
 			\hline
-			117012001& 4.46\%\\
+			117012001& 0.0446\\
 			\hline
-			117012101& 2.62\%\\
+			117012101& 0.0262\\
 			\hline
-			117012201& 4.31\%\\
+			117012201& 0.0431\\
 			\hline
-			117012301& 2.75\%\\
+			117012301& 0.0275\\
 			\hline
-			117016001& 3.60\%\\
+			117016001& 0.0360\\
 			\hline
-			123025901& 1.89\%\\
+			123025901& 0.0189\\
 			\hline
 		\end{tabular}
 		\label{tab1}
@@ -408,17 +408,17 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \begin{table}[htbp]
-	\caption{Global MAPE \& RMSE per Motorway}
+	\caption{Global MARE \& RMSE per Motorway}
 	\begin{center}
 		\begin{tabular}{|c|c|c|}
 			\hline
 			\textbf{Motorway}&{\textbf{MAPE [\%]}}&{\textbf{RMSE [s]}} \\
 			\hline
-			M6& 3.18\%& 0.0368\\
+			M6& 0.0318& 0.0368\\
 			\hline
-			M11& 3.00\%& 0.0355\\
+			M11& 0.0300& 0.0355\\
 			\hline
-			M25& 5.52\%& 0.0667\\
+			M25& 0.0552& 0.0667\\
 			\hline
 		\end{tabular}
 		\label{mapeglobal}
