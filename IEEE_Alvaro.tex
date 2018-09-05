@@ -34,7 +34,7 @@ a.cabrejas-egea@warwick.ac.uk}
 \IEEEauthorblockA{\textit{Geospatial Department} \\
 \textit{McKinsey \& Company} \\
 	San Jose, Costa Rica \\
-	peter_de_ford@mckinsey.com}
+	peter\_de\_ford@mckinsey.com}
 \and
 \IEEEauthorblockN{Colm Connaughton}
 \IEEEauthorblockA{\textit{Warwick Mathematics Institute} \\
@@ -73,19 +73,19 @@ Profiles should represent the typical time to traverse a link at a given time of
  
 Profiles clearly vary with day of the week and time of the day but should be relatively stable from one week to the next.
 This stability over time means calculating profiles is different from the problem of short-term forecasting.
-While there is no a-priori mathematical definition of a typical travel time,  we take it to mean the value that minimises the mean absolute percentage error (MAPE) with respect to subsequently measured travel times.
+While there is no a-priori mathematical definition of a typical travel time,  we take it to mean the value that minimises the mean absolute relative error (MAPE) with respect to subsequently measured travel times.
 NTIS publishes profile values alongside measured travel times although the methodology used to calculate them is not in the public domain. 
 In this paper, we present a novel method for generating profiles for a complete week. 
 Our approach is based on statistical analysis of previous data and does not require any a-priori segmentation of days into classes. 
 Rather patterns of intra- and inter-day variability are learned directly from the data.
 
 The available literature on travel times is extensive but most recent research focuses on short-term forecasting and not on the long term \cite{long-term} \cite{long-term-2}. 
-From a methodological point of view machine learning and statistical methods take most of the attention \cite{should}, different approaches can be found: using historical data \cite{simple} \cite{dynamic-historic}, neural networks \cite{NN}.
-Others take closer approaches to this paper differentiating between peak and non-peak \cite{peak-historic}, using spectral analysis \cite{spectral1} \cite{spectral2} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
+From a methodological point of view statistical methods and machine learning take most of the attention \cite{should}. Within the last group, neural networks are getting a level or relevance \cite{NN}.
+Others take closer approaches to this paper: using historical data \cite{simple} \cite{dynamic-historic}, differentiating between peak and non-peak \cite{peak-historic}, performing spectral analysis \cite{spectral1} \cite{spectral2} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
 Comparisons between some of these studies and others can be found in \cite{nikovski}, \cite{lint}, \cite{mori} and \cite{ser}. 
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
 To assess the transferability of our method, it is tested on three different motorways.
-The method here presented, uses a combination of spectral analysis, tree decisions and local regression.
+The method here presented, uses a combination of spectral analysis, tree decisions and Locally Weighted Regression (LWR).
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
 The instantaneous travel time for a given segment of road is the average time that the vehicles currently in it are taking since they enter the segment until they exit it.\\
@@ -195,13 +195,13 @@ During exploratory data analysis we found that, from the point of view of travel
 	\label{fig:flowchart}
 \end{figure}
 
-This decomposition, assuming Gaussian noise $\xi$, signal of the form:
+In this context, assuming Gaussian noise $\xi$, and that the components operate in an additive way, generated a signal of the form:
 \begin{equation}
 \textrm{Travel Time}_t  = \textrm{Background}_t + \textrm{Spikes}_t + \xi
 \end{equation}
-The objective was to separate them in such a way that times of smooth operation are captured as part of the Background and used for spectral analysis, attempting to mitigate the prediction error induced by the high frequency oscillations and obtaining a basic view of what can be daily observed.
-Meanwhile, the spikes, including the recurring and non-recurring congestion, were treated separately searching for seasonality in larger time scales than those in which the background oscillates, as suggested by Fig. \ref{fig:acf}. 
-Ideally, after this step, the remainder should only contain isolated large rare events deviating from the profile and white noise.\\
+The objective was to separate them in such a way that the moments of smooth and normal operation are captured as part of the Background and used for spectral analysis, attempting to mitigate the prediction error induced by the high frequency oscillations and obtaining a basic view of what can be daily observed.
+Meanwhile, the spikes, including the recurring and non-recurring congestion, were treated separately searching for seasonality in larger time scales than those in which the travel time signal oscillates, as suggested by Fig. \ref{fig:acf}. 
+Ideally, after this final step of the decomposition, the remainder should only contain isolated large rare events deviating from the profile and white noise.\\
 
 To prevent the differing lengths of the links from affecting this decomposition, for this step, all travel times were normalized according to their corresponding link's free flow time, defined as the time to transverse the length of the link at the maximum legal speed allowed by the motorway. 
 However, this step only mitigates the non-regularity of the time series, since there are drivers who do not follow these limits.
@@ -256,9 +256,9 @@ Signal smoothing can be performed by completely removing a range of frequencies 
 
 \end{enumerate}
 \subsection{Seasonality Component}
-Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was chosen for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle while being robust to outliers \cite{forecasting}.\\
+Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was the chosen algorithm for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle while being robust to outliers \cite{forecasting}.\\
 
-Below, the sequence of steps taken to extract the Seasonality Components that can be observed in Fig. \ref{fig:acf} is described in line with Fig. \ref{fig:flowchart}. 
+Below, the sequence of steps taken to extract the Seasonality Components that can be observed in Fig. \ref{fig:acf} is described in line with the schematic data streams represented in Fig. \ref{fig:flowchart}. 
 Note that this should be applied to the $n$ training weeks as a single time series.
 \begin{enumerate}
 	\item Decomposition of Background for daily seasonality
@@ -272,7 +272,7 @@ Note that this should be applied to the $n$ training weeks as a single time seri
 	\item Extract Spike's Seasonality corresponding to the number of weeks for forecasting
 	\item Add Spike's Seasonal component to the output of 8
 \end{enumerate}
-To ensure a successful decomposition, after Step 3  Background's Remainder should be zero mean, Gaussian distributed. Background's Trend should have a near zero slope. This should also hold after Step 8.
+To ensure a successful decomposition, after Step 3  Background's Remainder should be zero mean, Gaussian distributed. Background's Trend should have a near zero slope. These outcomes should also hold if performed again after Step 8, with the addition that the trend should also be close to zero in absolute value, since the time scales in which such a global trend can meaningfully vary should be much greater than the prediction scope of this algorithm.
 \subsection{Seasonal-Spectral Hybrid Profile}
 In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of the two forecasts generated in the previous points is taken, depending on what is the identified regime: 
 
@@ -362,7 +362,7 @@ Here, the accuracy of the algorithm is compared against the Published Profiles a
 As it can be seen in Figures \ref{fig:m6daytime}, \ref{fig:m11daytime} and \ref{fig:m25daytime}, the Hybrid Profile has a higher accuracy than the Published Profiles and the NS Model for all times of the day, all locations and training lengths. 
 The most relevant improvement occurs during the morning and evening peak hours, where the algorithm presented in this paper does not accuse meaningful performance worsening relative to the morning plateau when compared with the other two profiles.\\
 In the case of the M6 and M11, where the training set is richer, the error at peak times is reduced by at least 50\% in all cases, reaching as much as 68.7\% in the case of the M6 morning rush.
-In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the use of EWMA, this recurrent congestion is better captured by it. 
+In the case of the M25, which is congested on a regular basis, the errors in the Published Profile during peak times are slightly lower than on the other cases, indicating that, given the use of EWMA for its calculation, recurrent congestion is better captured by it. 
 Even in this case, the proposed algorithm performs significantly better than any of the other two, except for a brief window between 6-7AM when it is outperformed by the NS Model.
 
 \begin{table}[htbp]
@@ -426,7 +426,7 @@ Even in this case, the proposed algorithm performs significantly better than any
 
 \section{Future Work}
 The algorithm presented above meets the requirements described in Section \ref{algorithm} except for an heuristically set threshold. 
-One potential way of reaching compliance with these requirements is to perform the decomposition by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients oscillate over time within a scale level. 
+One potential way of reaching compliance with these requirements is to perform the decomposition by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients fluctuate over time within a scale level. 
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
 This work was part funded by the EPSRC under grant no. EP/L015374. 
@@ -438,15 +438,12 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 
 \begin{thebibliography}{00}
 \bibitem{NTIS} The Highways Agency, "National Transport Information System Publish Services", Technical Report, 2011. 
-\bibitem{STL} R. B. Cleveland, W. S. Cleveland, J. E. McRae and I. Terpenning, "STL: A Seasonal-Trend Decomposition Procedure Based on Loess", Journal of Official Statistics, vol. 6, 1990, pp. 3-73.
-\bibitem{forecasting} R. J. Hyndman and G. Athanasopoulos, "Forecasting: Principles and Practice", Otexts, 2013.
-\bibitem{FFT} J. W. Cooley and J. W. Tukey, "An algorithm for the machine calculation of complex Fourier series", Mathematics of computation, 1965, vol. 19, no 90, p. 297-301.
 \bibitem{long-term} J. Moreira, A. Jorge, J. Sousa, C. Soares 2012. Comparing state-of-the-art regression methods for long term travel time prediction. Intelligent Data Analysis. 16. 10.3233/IDA-2012-0532. 
 \bibitem{long-term-2} G. Klunder, P. Baas, F. op de Beek. 2018. A long-term travel time prediction algorithm using historical data. 14th World Congress on Intelligent Transport Systems, ITS 2007; Beijing; China; October 2007 through 13 October 2007, 1191-1198
 \bibitem{should} Kirby, H. R., Watson, S. M., Dougherty, M. S. 1997. Should we use neural networks or statistical models for short-term motorway traffic forecasting?. International Journal of Forecasting, 13(1), 43-50.
+\bibitem{NN} Lee, Y. 2009. Freeway travel time forecast using artifical neural networks with cluster method. In Information Fusion, 2009. FUSION'09. 12th International Conference on (pp. 1331-1338). IEEE.
 \bibitem{simple} Rice, J., Van Zwet, E. (2004). A simple and effective method for predicting travel times on freeways. IEEE Transactions on Intelligent Transportation Systems, 5(3), 200-207.
 \bibitem{dynamic-historic} Chien, S. I. J. et al. 2003. Dynamic travel time prediction with real-time and historic data. Journal of transportation engineering, 129(6), 608-616.
-\bibitem{NN} Lee, Y. 2009. Freeway travel time forecast using artifical neural networks with cluster method. In Information Fusion, 2009. FUSION'09. 12th International Conference on (pp. 1331-1338). IEEE.
 \bibitem{peak-historic} Zhang, Y. et al. 2011. Analysis of peak and non‐peak traffic forecasts using combined models. Journal of Advanced Transportation, 45(1).
 \bibitem{spectral1} Nicholson, H., Swann, C. D. 1974. The prediction of traffic flow volumes based on spectral analysis. Transportation Research, 8(6), 533-538.
 \bibitem{spectral2} Park, D. et al. 1999. Spectral basis neural networks for real-time travel time forecasting. Journal of Transportation Engineering, 125(6).
@@ -460,6 +457,9 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 \bibitem{lint} van Hinsbergen, C.P.IJ., van Lint, J.W.C.,  Sanders, F. M. (2007). Short Term Traffic Prediction Models. ITS World Congress, Beijing, China.
 \bibitem{mori} Mori U, Mendiburu A, Álvarez M, Lozano JA. A review of travel time estimation and forecasting for Advanced Traveller Information Systems. Transportmetrica A: Transport Science. 2015 Feb 7;11(2):119-57.
 \bibitem{ser} Lana I, Del Ser J, Velez M, Vlahogianni EI. Road Traffic Forecasting: Recent Advances and New Challenges. IEEE Intelligent Transportation Systems Magazine. 2018;10(2):93-109.
+\bibitem{FFT} J. W. Cooley and J. W. Tukey, "An algorithm for the machine calculation of complex Fourier series", Mathematics of computation, 1965, vol. 19, no 90, p. 297-301.
+\bibitem{STL} R. B. Cleveland, W. S. Cleveland, J. E. McRae and I. Terpenning, "STL: A Seasonal-Trend Decomposition Procedure Based on Loess", Journal of Official Statistics, vol. 6, 1990, pp. 3-73.
+\bibitem{forecasting} R. J. Hyndman and G. Athanasopoulos, "Forecasting: Principles and Practice", Otexts, 2013.
 \end{thebibliography}
 
 \end{document}
