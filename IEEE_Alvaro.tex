@@ -79,9 +79,9 @@ In this paper, we present a novel method for generating profiles for a complete 
 Our approach is based on statistical analysis of previous data and does not require any a-priori segmentation of days into classes. 
 Rather patterns of intra- and inter-day variability are learned directly from the data.
 
-The available literature on travel times is extensive but most recent research focuses on short-term forecasting and not on the long term \cite{long-term} \cite{long-term-2}. 
-From a methodological point of view statistical methods and machine learning take most of the attention \cite{should}. Within the last group, neural networks are getting a level or relevance \cite{NN}.
-Others take closer approaches to this paper: using historical data \cite{simple} \cite{dynamic-historic}, differentiating between peak and non-peak \cite{peak-historic}, performing spectral analysis \cite{spectral1} \cite{spectral2} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
+The available literature on travel times is extensive but most recent research focuses on short-term forecasting and with fewer studies looking into the long term \cite{long-term} \cite{long-term-2}. 
+From a methodological point of view statistical methods and machine learning take most of the attention \cite{should}. Within the last group, neural networks are getting a level or relevance \cite{NN} \cite{spectral2} .
+Others take closer approaches to this paper: using historical data \cite{simple} \cite{dynamic-historic}, differentiating between peak and non-peak \cite{peak-historic}, performing spectral analysis \cite{spectral1} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
 Comparisons between some of these studies and others can be found in \cite{nikovski}, \cite{lint}, \cite{mori} and \cite{ser}. 
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
 To assess the transferability of our method, it is tested on three different motorways.
@@ -425,7 +425,7 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \section{Future Work}
-The algorithm presented above meets the requirements described in Section \ref{algorithm} except for an heuristically set threshold. 
+The algorithm presented above meets the requirements described in Section \ref{algorithm} except for the need of an heuristically set threshold.
 One potential way of reaching compliance with these requirements is to perform the decomposition by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients fluctuate over time within a scale level. 
 In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
 \section*{Acknowledgments}
@@ -442,19 +442,19 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 \bibitem{long-term-2} G. Klunder, P. Baas, F. op de Beek. 2018. A long-term travel time prediction algorithm using historical data. 14th World Congress on Intelligent Transport Systems, ITS 2007; Beijing; China; October 2007 through 13 October 2007, 1191-1198
 \bibitem{should} Kirby, H. R., Watson, S. M., Dougherty, M. S. 1997. Should we use neural networks or statistical models for short-term motorway traffic forecasting?. International Journal of Forecasting, 13(1), 43-50.
 \bibitem{NN} Lee, Y. 2009. Freeway travel time forecast using artifical neural networks with cluster method. In Information Fusion, 2009. FUSION'09. 12th International Conference on (pp. 1331-1338). IEEE.
-\bibitem{simple} Rice, J., Van Zwet, E. (2004). A simple and effective method for predicting travel times on freeways. IEEE Transactions on Intelligent Transportation Systems, 5(3), 200-207.
+\bibitem{spectral2} Park, D. et al. 1999. Spectral basis neural networks for real-time travel time forecasting. Journal of Transportation Engineering, 125(6).
+\bibitem{simple} Rice, J., Van Zwet, E. 2004. A simple and effective method for predicting travel times on freeways. IEEE Transactions on Intelligent Transportation Systems, 5(3), 200-207.
 \bibitem{dynamic-historic} Chien, S. I. J. et al. 2003. Dynamic travel time prediction with real-time and historic data. Journal of transportation engineering, 129(6), 608-616.
 \bibitem{peak-historic} Zhang, Y. et al. 2011. Analysis of peak and non‐peak traffic forecasts using combined models. Journal of Advanced Transportation, 45(1).
 \bibitem{spectral1} Nicholson, H., Swann, C. D. 1974. The prediction of traffic flow volumes based on spectral analysis. Transportation Research, 8(6), 533-538.
-\bibitem{spectral2} Park, D. et al. 1999. Spectral basis neural networks for real-time travel time forecasting. Journal of Transportation Engineering, 125(6).
-\bibitem{williams} Williams, B., Durvasula, P., Brown, D. (1998). Urban freeway traffic flow prediction: application of seasonal autoregressive integrated moving average and exponential smoothing models. Transportation Research Record: Journal of the Transportation Research Board, (1644), 132-141.
-\bibitem{sun} Sun, H., Liu, H. X., Xiao, H., He, R. R., Ran, B. (2003, January). Short term traffic forecasting using the local linear regression model. In 82nd Annual Meeting of the Transportation Research Board, Washington, DC.
-\bibitem{zhong} Zhong, M., Sharma, S., Lingras, P. (2005). Refining genetically designed models for improved traffic prediction on rural roads. Transportation planning and technology, 28(3), 213-236.
-\bibitem{chowdhury} Chowdhury, N. K., Nath, R. P. D., Lee, H., Chang, J. (2009, September). Development of an effective travel time prediction method using modified moving average approach. In International Conference on Knowledge-Based and Intelligent Information and Engineering Systems (pp. 130-138). Springer, Berlin, Heidelberg.
-\bibitem{acqua} Dell'Acqua, P., Bellotti, F., Berta, R., De Gloria, A. (2015). Time-aware multivariate nearest neighbor regression methods for traffic flow prediction. IEEE Transactions on Intelligent Transportation Systems, 16(6), 3393-3402.
-\bibitem{vana} Kumar, S. V., Vanajakshi, L. (2015). Short-term traffic flow prediction using seasonal ARIMA model with limited input data. European Transport Research Review, 7(3), 21.
-\bibitem{nikovski} Nikovski D, Nishiuma N, Goto Y, Kumazawa H. Univariate short-term prediction of road travel times. Intelligent Transportation Systems, 2005. Proceedings. 2005 IEEE 2005 Sep 13 (pp. 1074-1079). IEEE.
-\bibitem{lint} van Hinsbergen, C.P.IJ., van Lint, J.W.C.,  Sanders, F. M. (2007). Short Term Traffic Prediction Models. ITS World Congress, Beijing, China.
+\bibitem{williams} Williams, B., Durvasula, P., Brown, D. 1998. Urban freeway traffic flow prediction: application of seasonal autoregressive integrated moving average and exponential smoothing models. Transportation Research Record: Journal of the Transportation Research Board, (1644), 132-141.
+\bibitem{sun} Sun, H., Liu, H. X., Xiao, H., He, R. R., Ran, B. 2003. Short term traffic forecasting using the local linear regression model. In 82nd Annual Meeting of the Transportation Research Board, Washington, DC.
+\bibitem{zhong} Zhong, M., Sharma, S., Lingras, P. 2005. Refining genetically designed models for improved traffic prediction on rural roads. Transportation planning and technology, 28(3), 213-236.
+\bibitem{chowdhury} Chowdhury, N. K., Nath, R. P. D., Lee, H., Chang, J. 2009. Development of an effective travel time prediction method using modified moving average approach. In International Conference on Knowledge-Based and Intelligent Information and Engineering Systems (pp. 130-138). Springer, Berlin, Heidelberg.
+\bibitem{acqua} Dell'Acqua, P., Bellotti, F., Berta, R., De Gloria, A. 2015. Time-aware multivariate nearest neighbor regression methods for traffic flow prediction. IEEE Transactions on Intelligent Transportation Systems, 16(6), 3393-3402.
+\bibitem{vana} Kumar, S. V., Vanajakshi, L. 2015. Short-term traffic flow prediction using seasonal ARIMA model with limited input data. European Transport Research Review, 7(3), 21.
+\bibitem{nikovski} Nikovski D, Nishiuma N, Goto Y, Kumazawa H. Univariate short-term prediction of road travel times. Intelligent Transportation Systems, 2005. Proceedings. 2005 Sep 13 (pp. 1074-1079). IEEE.
+\bibitem{lint} van Hinsbergen, C.P.IJ., van Lint, J.W.C.,  Sanders, F. M. Short Term Traffic Prediction Models. ITS World Congress, Beijing, China. 2007.
 \bibitem{mori} Mori U, Mendiburu A, Álvarez M, Lozano JA. A review of travel time estimation and forecasting for Advanced Traveller Information Systems. Transportmetrica A: Transport Science. 2015 Feb 7;11(2):119-57.
 \bibitem{ser} Lana I, Del Ser J, Velez M, Vlahogianni EI. Road Traffic Forecasting: Recent Advances and New Challenges. IEEE Intelligent Transportation Systems Magazine. 2018;10(2):93-109.
 \bibitem{FFT} J. W. Cooley and J. W. Tukey, "An algorithm for the machine calculation of complex Fourier series", Mathematics of computation, 1965, vol. 19, no 90, p. 297-301.
