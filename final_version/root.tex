@@ -1,6 +1,20 @@
-\documentclass[conference, letterpaper]{IEEEtran}
-\IEEEoverridecommandlockouts
-% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+
+
+
+
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
@@ -17,32 +31,56 @@
 \usepackage{hyperref}
 \hypersetup{pdftex,colorlinks=true,allcolors=blue}
 \usepackage{hypcap}
+%In case you encounter the following error:
+%Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
+%Error 1000 An error occurred while parsing a contents stream. Unable to analyze the PDF file.
+%This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
+%Please use one of the alternatives below to circumvent this error by uncommenting one or the other
+%\pdfobjcompresslevel=0
+%\pdfminorversion=4
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% The following packages can be found on http:\\www.ctan.org
+%\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+%\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+
+\title{\LARGE \bf
+Estimating Baseline Travel Times for the UK Strategic Road Network*
+}
+
+
+\author{Alvaro Cabrejas Egea$^{1}$, Peter de Ford$^{2}$ and Colm Connaughton$^{3}$% <-this % stops a space
+\thanks{*This work was part funded by the EPSRC under grant no. EP/L015374. 
+We are also grateful to the London Mathematical Laboratory for additional financial support. 
+We thank Ayman Boustati, Laura Guzman and Guillem Mosquera for assistance with exploratory data analysis. 
+We also thank Steve Hilditch and Thales Ground Transportation Systems, UK for help understanding the NTIS system.  
+A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and support.}% <-this % stops a space
+\thanks{$^{1}$Alvaro Cabrejas Egea is with MathSys Centre for Doctoral Training,
+        University of Warwick, CV4 7AL, Coventry, United Kingdom
+        {\tt\small a.cabrejas-egea@warwick.ac.uk}}%
+\thanks{$^{2}$Peter de Ford with the Geospatial Department, McKinsey \& Company,
+        Costa Rica
+        {\tt\small peter\char`_de\char`_ford@mckinsey.com}}%
+\thanks{$^{3}$ Colm Connaughton with the Warwick Mathematics Institute \& Centre for Complexity Science, University of Warwick,
+        CV4 7AL, Coventry, United Kingdom
+        {\tt\small b.d.researcher@ieee.org}}%        
+}
+
 
 \begin{document}
 
-\title{Estimating Baseline Travel Times}
 
-\author{\IEEEauthorblockN{Alvaro Cabrejas Egea}
-\IEEEauthorblockA{\textit{MathSys Centre for Doctoral Training} \\
-\textit{University of Warwick}\\
-Coventry, United Kingdom \\
-a.cabrejas-egea@warwick.ac.uk}
-\and
-\IEEEauthorblockN{Peter De Ford}
-\IEEEauthorblockA{\textit{Geospatial Department} \\
-\textit{McKinsey \& Company} \\
-	San Jose, Costa Rica \\
-	peter\_de\_ford@mckinsey.com}
-\and
-\IEEEauthorblockN{Colm Connaughton}
-\IEEEauthorblockA{\textit{Warwick Mathematics Institute} \\
-\textit{\& Centre for Complexity Science} \\
-\textit{University of Warwick}\\
-Coventry, United Kingdom \\
-c.p.connaughton@warwick.ac.uk}
-}
 
 \maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
 
 \begin{abstract}
 We present a new method for long-term estimation of the expected travel time for links on highways and their variation with time.  
@@ -57,10 +95,6 @@ We assess our method by cross-validating in several UK motorways.
 We use 8 weeks of training data and calculate the error of the resulting travel time estimates for a week of test data, repeating this process 4 times. 
 We find that the error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 \end{abstract}
-
-\begin{IEEEkeywords}
-Travel Time, Traffic Congestion, Prediction
-\end{IEEEkeywords}
 
 \section{Introduction}
 The UK collects and processes data from its Strategic Road Network (SRN) in real time and makes it available through the National Traffic Information Service (NTIS) \cite{NTIS}. 
@@ -82,7 +116,7 @@ From a methodological point of view statistical methods and machine learning tak
 Others take closer approaches to this paper: using historical data \cite{simple} \cite{dynamic-historic}, differentiating between peak and non-peak \cite{peak-historic}, performing spectral analysis \cite{spectral1} or Locally Weighted Regressions \cite{williams} \cite{sun} \cite{zhong} \cite{chowdhury} \cite{acqua} \cite{vana}.
 Comparisons between some of these studies and others can be found in \cite{nikovski}, \cite{lint}, \cite{mori} and \cite{ser}. 
 Most of these methods have been specifically tuned for the conditions on which they have been developed and transferability to other sites is often not evaluated.
-To assess the transferability of our method, it is tested on three different motorways.
+To assess the transferability of our method, it is tested on three different motorways and scored independently in each of them.
 The method here presented, uses a combination of spectral analysis, tree decisions and Locally Weighted Regression (LWR).
 \section{Examples of travel times} 
 The most direct variable for measuring the state of traffic over a length of road is the vehicles' travel times. 
@@ -250,11 +284,11 @@ Signal smoothing can be performed by completely removing a range of frequencies 
 	\item Remove frequencies corresponding to periods under 4 hours and over 1 week
 	\item Repeat for all $n$ weeks in training set
     \item Apply EWMA to the modified weekly Power Spectra
-	\item Compute the Inverse Transform
+	\item Compute the Inverse FFT Transform
 
 \end{enumerate}
 \subsection{Seasonality Component}
-Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was the chosen algorithm for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle while being robust to outliers \cite{forecasting}.\\
+Seasonal-Trend Decomposition based on LOESS (STL) \cite{STL} was the chosen algorithm for the seasonality analysis since it can handle any type of seasonality, allowing the user to control how it changes over time as well as the smoothness of the trend-cycle while being highly robust to outliers \cite{forecasting}.\\
 
 Below, the sequence of steps taken to extract the Seasonality Components that can be observed in Fig. \ref{fig:acf} is described in line with the schematic data streams represented in Fig. \ref{fig:flowchart}. 
 Note that this should be applied to the $n$ training weeks as a single time series.
@@ -270,7 +304,7 @@ Note that this should be applied to the $n$ training weeks as a single time seri
 	\item Extract Spike's Seasonality corresponding to the number of weeks for forecasting
 	\item Add Spike's Seasonal component to the output of 8
 \end{enumerate}
-To ensure a successful decomposition, after Step 3  Background's Remainder should be zero mean, Gaussian distributed. Background's Trend should have a near zero slope. These outcomes should also hold if performed again after Step 8, with the addition that the trend should also be close to zero in absolute value, since the time scales in which such a global trend can meaningfully vary should be much greater than the prediction scope of this algorithm.
+To ensure a successful decomposition, after performing Step 3, the Background's Remainder should be zero mean, Gaussian distributed. Background's Trend should have a near zero slope. These outcomes should also hold if performed again after Step 8, with the addition that the trend should also be close to zero in absolute value, since the time scales in which such a global trend can meaningfully vary should be much greater than the prediction scope of this algorithm.
 \subsection{Seasonal-Spectral Hybrid Profile}
 In order to create the final Seasonal-Spectral Hybrid profile (Hybrid), one of the two forecasts generated in the previous points is taken, depending on what is the identified regime: 
 
@@ -310,6 +344,7 @@ For complete Motorways, the Root Mean Squared Error (RMSE) has been calculated f
 
 In both cases the error for a Link is defined as the average MARE or RMSE across all prediction points.
 The error for a Motorway is defined as the average of the error across all its links.
+
 \subsection{Accuracy by Quantile}
 \begin{figure}[htbp]
 	\centerline{\includegraphics[width=\linewidth]{/finalplots/m6_q2.pdf}}
@@ -423,15 +458,14 @@ Even in this case, the proposed algorithm performs significantly better than any
 \end{table}
 
 \section{Future Work}
-The algorithm presented above meets the requirements described in Section \ref{algorithm} except for the need of an heuristically set threshold.
+The algorithm presented above meets the requirements described in Section \ref{algorithm} except for the need of an heuristically set threshold to separate the original Travel Time signal into Background and Spikes.
 One potential way of reaching compliance with these requirements is to perform the decomposition by applying a Wavelet Transform and separating background from spikes based on statistical analysis of the transformed time series in terms of how their Wavelet coefficients fluctuate over time within a scale level. 
-In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.
-\section*{Acknowledgments}
-This work was part funded by the EPSRC under grant no. EP/L015374. 
-We are also grateful to the London Mathematical Laboratory for additional financial support. 
-We thank Ayman Boustati, Laura Guzman and Guillem Mosquera for assistance with exploratory data analysis. 
-We also thank Steve Hilditch and Thales Ground Transportation Systems, UK for help understanding the NTIS system.  
-A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and support.
+In the future a sensitivity analysis should be conducted to explore the limits of the algorithm in terms of minimum training data set, as well as maximum performance with increased training.\\
+ \\
+ \\
+ \\
+ \\
+ 
 
 
 \begin{thebibliography}{00}
@@ -443,7 +477,7 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 \bibitem{spectral2} Park, D. et al. 1999. Spectral basis neural networks for real-time travel time forecasting. Journal of Transportation Engineering, 125(6).
 \bibitem{simple} Rice, J., Van Zwet, E. 2004. A simple and effective method for predicting travel times on freeways. IEEE Transactions on Intelligent Transportation Systems, 5(3), 200-207.
 \bibitem{dynamic-historic} Chien, S. I. J. et al. 2003. Dynamic travel time prediction with real-time and historic data. Journal of transportation engineering, 129(6), 608-616.
-\bibitem{peak-historic} Zhang, Y. et al. 2011. Analysis of peak and non‐peak traffic forecasts using combined models. Journal of Advanced Transportation, 45(1).
+\bibitem{peak-historic} Zhang, Y. et al. 2011. Analysis of peak and non?peak traffic forecasts using combined models. Journal of Advanced Transportation, 45(1).
 \bibitem{spectral1} Nicholson, H., Swann, C. D. 1974. The prediction of traffic flow volumes based on spectral analysis. Transportation Research, 8(6), 533-538.
 \bibitem{williams} Williams, B., Durvasula, P., Brown, D. 1998. Urban freeway traffic flow prediction: application of seasonal autoregressive integrated moving average and exponential smoothing models. Transportation Research Record: Journal of the Transportation Research Board, (1644), 132-141.
 \bibitem{sun} Sun, H., Liu, H. X., Xiao, H., He, R. R., Ran, B. 2003. Short term traffic forecasting using the local linear regression model. In 82nd Annual Meeting of the Transportation Research Board, Washington, DC.
@@ -453,11 +487,12 @@ A. C. E. thanks Stefan Grosskinsky for the initial guidance, discussions and sup
 \bibitem{vana} Kumar, S. V., Vanajakshi, L. 2015. Short-term traffic flow prediction using seasonal ARIMA model with limited input data. European Transport Research Review, 7(3), 21.
 \bibitem{nikovski} Nikovski D, Nishiuma N, Goto Y, Kumazawa H. Univariate short-term prediction of road travel times. Intelligent Transportation Systems, 2005. Proceedings. 2005 Sep 13 (pp. 1074-1079). IEEE.
 \bibitem{lint} van Hinsbergen, C.P.IJ., van Lint, J.W.C.,  Sanders, F. M. Short Term Traffic Prediction Models. ITS World Congress, Beijing, China. 2007.
-\bibitem{mori} Mori U, Mendiburu A, Álvarez M, Lozano JA. A review of travel time estimation and forecasting for Advanced Traveller Information Systems. Transportmetrica A: Transport Science. 2015 Feb 7;11(2):119-57.
+\bibitem{mori} Mori U, Mendiburu A, Alvarez M, Lozano JA. A review of travel time estimation and forecasting for Advanced Traveller Information Systems. Transportmetrica A: Transport Science. 2015 Feb 7;11(2):119-57.
 \bibitem{ser} Lana I, Del Ser J, Velez M, Vlahogianni EI. Road Traffic Forecasting: Recent Advances and New Challenges. IEEE Intelligent Transportation Systems Magazine. 2018;10(2):93-109.
 \bibitem{FFT} J. W. Cooley and J. W. Tukey, "An algorithm for the machine calculation of complex Fourier series", Mathematics of computation, 1965, vol. 19, no 90, p. 297-301.
 \bibitem{STL} R. B. Cleveland, W. S. Cleveland, J. E. McRae and I. Terpenning, "STL: A Seasonal-Trend Decomposition Procedure Based on Loess", Journal of Official Statistics, vol. 6, 1990, pp. 3-73.
 \bibitem{forecasting} R. J. Hyndman and G. Athanasopoulos, "Forecasting: Principles and Practice", Otexts, 2013.
 \end{thebibliography}
+
 
 \end{document}
