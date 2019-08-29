@@ -14,4 +14,4 @@ We assess our method by cross-validating in several UK motorways.
 We use 8 weeks of training data and calculate the error of the resulting travel time estimates for a week of test data, repeating this process 4 times. 
 We find that the error is significantly reduced compared to estimates obtained by simple segmentation of the data and compared to the estimates published by the NTIS system.
 
-The published paper [can be found here] (https://ieeexplore.ieee.org/abstract/document/8569924).
+The published paper [can be found here](https://ieeexplore.ieee.org/abstract/document/8569924).
